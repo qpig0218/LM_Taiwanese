@@ -6,7 +6,6 @@
     <!-- Chosen Palette: Energetic & Playful -->
     <title>臺灣生活型態醫學共識報告 - 第三章 生理參數與生物標記</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -22,11 +21,61 @@
             height: 280px;
             margin-left: auto;
             margin-right: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
         }
         @media (min-width: 768px) {
             .chart-container {
                 height: 320px;
             }
+        }
+        .simple-bar-chart {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 20px;
+            padding: 0 20px;
+        }
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 120px;
+        }
+        .bar {
+            width: 60px;
+            background: linear-gradient(45deg, #06D6A0, #118AB2);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        .bar:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #073B4C;
+            font-size: 14px;
+        }
+        .bar-label {
+            text-align: center;
+            font-size: 12px;
+            color: #118AB2;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-top: 5px;
         }
         .kpi-card {
             background-color: white;
@@ -199,7 +248,20 @@
                 <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">Fitbit試驗：MVPA與步數增加</h4>
                 <p class="text-gray-600 text-sm mt-4">為期16週的試驗顯示，Fitbit使用者每週中等至劇烈身體活動(MVPA)增加62分鐘，步數增加789步，依從性超過95%。</p>
                 <div class="chart-container">
-                    <canvas id="fitbitMVPAChart"></canvas>
+                    <div class="simple-bar-chart">
+                        <div class="bar-item">
+                            <div class="bar" style="height: 80px;">
+                                <div class="bar-value">62</div>
+                            </div>
+                            <div class="bar-label">MVPA增加<br>(分鐘/週)</div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar" style="height: 120px;">
+                                <div class="bar-value">789</div>
+                            </div>
+                            <div class="bar-label">步數增加<br>(步)</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -331,105 +393,17 @@
     </footer>
 
     <script>
-        let charts = {};
-
-        const palette = {
-            red: '#FF6B6B',
-            yellow: '#FFD166',
-            green: '#06D6A0',
-            blue: '#118AB2',
-            darkBlue: '#073B4C',
-            background: '#f0f4f8',
-            text: '#334155'
-        };
-
-        const defaultChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: palette.text,
-                        font: { size: 12, family: "'Noto Sans TC', sans-serif" },
-                        padding: 20
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        title: function(tooltipItems) {
-                            const item = tooltipItems[0];
-                            let label = item.chart.data.labels[item.dataIndex];
-                            if (Array.isArray(label)) {
-                              return label.join(' ');
-                            } else {
-                              return label;
-                            }
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    ticks: { color: palette.text, font: { size: 12 } },
-                    grid: { color: '#e2e8f0' }
-                },
-                x: {
-                    ticks: { color: palette.text, font: { size: 12 } },
-                    grid: { display: false }
-                }
-            }
-        };
-
-        function wrapLabels(label, maxLength) {
-            if (label.length <= maxLength) {
-                return label;
-            }
-            const words = label.split(' ');
-            let currentLine = '';
-            const lines = [];
-            for (const word of words) {
-                if ((currentLine + word).length > maxLength) {
-                    lines.push(currentLine.trim());
-                    currentLine = '';
-                }
-                currentLine += word + ' ';
-            }
-            lines.push(currentLine.trim());
-            return lines;
-        }
-
-        function createCharts() {
-            const fitbitMVPAChartCtx = document.getElementById('fitbitMVPAChart');
-            if (fitbitMVPAChartCtx) {
-                if (charts.fitbitMVPAChart) charts.fitbitMVPAChart.destroy();
-                charts.fitbitMVPAChart = new Chart(fitbitMVPAChartCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: [wrapLabels('MVPA增加 (分鐘/週)', 10), wrapLabels('步數增加 (步)', 10)],
-                        datasets: [{
-                            label: '平均增加量',
-                            data: [62, 789],
-                            backgroundColor: [palette.green, palette.blue],
-                            borderRadius: 4
-                        }]
-                    },
-                    options: { ...defaultChartOptions,
-                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
-                        scales: {
-                            y: {
-                                ...defaultChartOptions.scales.y,
-                                beginAtZero: true,
-                                title: { display: true, text: '增加量' }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
+        // Simple hover effects for interactivity (optional)
         document.addEventListener('DOMContentLoaded', function () {
-            createCharts();
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                bar.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                });
+                bar.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = 'none';
+                });
+            });
         });
     </script>
 </body>
