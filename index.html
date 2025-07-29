@@ -195,6 +195,19 @@
             color: #FF6B6B;
             margin-bottom: 0.75rem;
         }
+        .risk-card {
+            background-color: #ffebeb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #FF6B6B;
+        }
+        .risk-icon {
+            font-size: 3rem;
+            color: #FF6B6B;
+            margin-bottom: 0.75rem;
+        }
         .category-card {
             background-color: #f8f8f8;
             border-radius: 0.5rem;
@@ -2104,44 +2117,147 @@
 
         <div id="chapter11" class="tab-content">
             <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第十一章 輪班工作對健康的影響與應對策略</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討輪班工作對健康的影響，特別是其如何擾亂人體生理時鐘，導致多種慢性疾病風險增加，並提供個人、雇主和政策層面的應對策略。</p>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">輪班工作是現代24小時產業不可或缺的一部分，但其不規律的排班會擾亂人體固有的生理時鐘，對身心健康造成重大負擔。本章將總結輪班工作在台灣的流行病學、健康影響，解釋其潛在的生物機制，並概述個人、雇主和政策制定者可採取的實證策略以減輕危害。</p>
             
-            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">生理時鐘紊亂</h3>
-            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
-                <li>夜間工作和不規律的輪班時間會導致外部需求與內部生理時鐘不同步。</li>
-                <li>這種紊亂會抑制夜間褪黑激素分泌、影響皮質醇節律，並導致時鐘基因表達失同步。</li>
-                <li>這些變化會損害胰島素敏感性、改變脂質代謝並引發氧化壓力，增加慢性病和癌症的易感性。</li>
-            </ul>
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生理時鐘紊亂：輪班工作的核心問題</h3>
+            <p class="text-gray-700 mb-4">人體生理時鐘系統由視交叉上核和周邊時鐘協調，同步睡眠-清醒週期、荷爾蒙分泌、新陳代謝和免疫功能與外部光暗週期。夜間工作和輪班制使工作者暴露於夜間光線和不規律的睡眠-清醒週期，導致外部需求與內部節律失調。這種生理時鐘失調會抑制夜間褪黑激素分泌、削弱皮質醇節律並使時鐘基因表達失同步。這些變化會損害胰島素敏感性、改變脂質代謝並引發氧化應激，從而增加罹患慢性病和癌症的易感性。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">~25%</div>
+                    <div class="kpi-label">台灣勞動力從事非標準班表</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">10%↑</div>
+                    <div class="kpi-label">輪班護理師符合輪班工作睡眠障礙標準</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">台灣的勤奮文化、家庭承諾和受歡迎的夜間休閒活動，進一步使適應不規律班表變得複雜。經濟誘因、有限的工作選擇和文化規範鼓勵員工接受加班和不規律工時，而夜間安排的社交活動與恢復性睡眠衝突，加劇了健康風險。</p>
 
-            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">輪班工作的健康後果</h3>
-            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
-                <li>**代謝紊亂與糖尿病：** 輪班工作者的代謝症候群風險增加兩倍以上。</li>
-                <li>**心血管疾病：** 心肌梗塞和冠狀動脈事件風險顯著升高。</li>
-                <li>**胃腸道疾病：** 輪班工作者患腸躁症的盛行率高出81%。</li>
-                <li>**癌症：** 夜班工作被國際癌症研究機構列為「可能的人類致癌物」。</li>
-                <li>**心理健康與睡眠：** 輪班工作增加不良心理健康結果的風險，包括憂鬱和焦慮。</li>
-            </ul>
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">輪班工作的健康後果</h3>
+            <p class="text-gray-700 mb-4">觀察性研究和機制性證據將輪班工作與心臟代謝疾病、睡眠障礙、胃腸道紊亂、癌症和不良心理健康結果聯繫起來。近期系統性回顧強調了輪班工作和生理時鐘紊亂對心血管健康的影響。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="risk-card">
+                    <div class="risk-icon">🍬</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">代謝紊亂與糖尿病</h4>
+                    <p class="text-sm text-gray-600">輪班工作使代謝症候群風險增加兩倍以上（OR 2.17），第二型糖尿病風險約為日班工作者的兩倍。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">💔</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">心血管疾病</h4>
+                    <p class="text-sm text-gray-600">輪班工作者心肌梗塞風險高23%，冠狀動脈事件風險高24%；夜班風險最高。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">🤢</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">胃腸道紊亂</h4>
+                    <p class="text-sm text-gray-600">輪班工作者患腸躁症盛行率高81%。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">🎗️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">癌症</h4>
+                    <p class="text-sm text-gray-600">夜班工作被國際癌症研究機構列為「可能的人類致癌物」。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">😔</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">心理健康與睡眠</h4>
+                    <p class="text-sm text-gray-600">輪班工作使不良心理健康風險增加28%，憂鬱症狀風險增加33%。台灣護理師憂鬱和焦慮盛行率高。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">🤕</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">其他健康問題</h4>
+                    <p class="text-sm text-gray-600">慢性疲勞、認知功能受損、免疫功能下降、生殖問題、事故和錯誤風險增加。</p>
+                </div>
+            </div>
             <div class="data-card mb-6">
                 <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">輪班工作與代謝症候群風險</h4>
+                <p class="text-gray-600 text-center mb-4">輪班工作者的代謝症候群風險顯著高於日班工作者。</p>
                 <div class="chart-container">
                     <canvas id="shiftWorkChart"></canvas>
                 </div>
             </div>
+            <p class="text-gray-700 mb-6">**評估與監測：** 臨床醫生應常規詢問工作班表，並使用睡眠評估工具。定期監測血壓、空腹血糖、血脂和心理健康狀況。評估生理時鐘相位有助於制定介入策略。職業史和社會心理因素也應納入考量。</p>
 
-            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">輪班工作者的應對策略</h3>
-            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
-                <li>**睡眠與生理時鐘管理：** 保護白天睡眠（遮光窗簾、眼罩、耳塞）、策略性光照、褪黑激素。</li>
-                <li>**營養與運動：** 規律用餐、避免高油脂食物、適度運動。</li>
-                <li>**壓力管理與社交支持：** 正念、深呼吸、太極拳、氣功、尋求社交支持。</li>
-                <li>**健康監測：** 定期健康檢查、監測睡眠模式和心理健康症狀。</li>
-            </ul>
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">輪班工作者的應對策略</h3>
+            <p class="text-gray-700 mb-4">輪班工作者可採取以下策略來減輕健康風險：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">😴</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">睡眠與生理時鐘管理</h4>
+                    <p class="text-sm text-gray-600 mt-2">保護白天睡眠（遮光窗簾、眼罩、耳塞），保持規律作息，夜班後小睡15-30分鐘。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">💡</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">策略性光照</h4>
+                    <p class="text-sm text-gray-600 mt-2">夜班期間使用明亮光線增強警覺性，下班後減少光線暴露以促進褪黑激素釋放。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">💊</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">褪黑激素與藥物</h4>
+                    <p class="text-sm text-gray-600 mt-2">短期使用褪黑激素可縮短入睡時間，安眠藥或促醒劑需謹慎使用並在醫療監督下。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🍽️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">營養與運動</h4>
+                    <p class="text-sm text-gray-600 mt-2">規律用餐與生理時鐘同步，夜間選擇清淡富含蛋白質的零食。規律運動改善心臟代謝健康和情緒。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🧘</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">壓力管理與社交支持</h4>
+                    <p class="text-sm text-gray-600 mt-2">練習正念、深呼吸、太極拳或氣功。與家人朋友共同規劃時間，參與職場支持團體。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏥</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">健康監測</h4>
+                    <p class="text-sm text-gray-600 mt-2">每年健康評估，包括血壓、空腹血糖、血脂和癌症篩查。監測睡眠模式和心理健康症狀。</p>
+                </div>
+            </div>
 
-            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">雇主與政策建議</h3>
-            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
-                <li>**排班實踐：** 採用順向輪班、限制連續夜班、提供充足恢復時間。</li>
-                <li>**工作場所設施：** 提供安靜休息區、夜班明亮照明、健康餐飲選擇。</li>
-                <li>**勞動保護：** 限制加班、強制休息時間、提供交通協助。</li>
-            </ul>
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">雇主與政策建議</h3>
+            <p class="text-gray-700 mb-4">雇主在減輕輪班相關危害方面扮演關鍵角色。循證排班實踐包括順向輪班、限制連續夜班、提供至少48小時的夜班後恢復時間，並避免快速輪班。工作場所應提供安靜的休息區、夜班期間的明亮照明、健康的食物選擇和可及的健康篩查。職業健康計畫必須教育員工睡眠衛生、營養和應對策略。政策制定者應執行限制加班的勞動標準，強制休息，並確保輪班工作者獲得適當的補償和保護。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">🗓️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">排班實踐</h4>
+                    <p class="text-sm text-gray-600 mt-2">順向輪班、限制連續夜班、充足恢復時間、避免快速輪班。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏢</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">工作場所設施</h4>
+                    <p class="text-sm text-gray-600 mt-2">提供安靜休息區、夜班明亮照明、健康食物選項、可及健康篩查。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">⚖️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">勞動保護與政策</h4>
+                    <p class="text-sm text-gray-600 mt-2">限制加班、強制休息時間、適當補償和保護，推廣輪班工作風險意識。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣文化背景考量</h3>
+            <p class="text-gray-700 mb-4">台灣的「拼命」工作文化和24小時服務的普及塑造了輪班工作者的經歷。夜市和便利店提供隨手可得但不健康的食物。許多輪班工作者騎乘機車通勤，疲勞時增加事故風險。傳統習俗（如飲用草本茶、公園練太極拳）可能支持健康。家庭義務（照顧年邁父母或子女）可能與不規律班表衝突，加劇睡眠剝奪和壓力。雇主和醫療提供者在設計介入措施時應考慮這些文化因素。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">輪班工作是台灣經濟不可或缺的一部分，但卻帶來巨大的健康成本。強有力的證據將輪班班表與代謝症候群、第二型糖尿病、心血管疾病、腸躁症、癌症和精神健康障礙聯繫起來。生物機制包括生理時鐘失調、睡眠債和荷爾蒙失調。全面的策略—保護睡眠、管理光線暴露、採納健康行為、監測健康和實施支持性工作政策—可以減輕這些風險。將介入措施根據台灣文化背景進行調整，並讓雇主和政策制定者參與，對於保護這支重要勞動力的福祉至關重要。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚨</span>
+                    <p>生理時鐘紊亂導致健康風險：不規律的班表使生理時鐘失同步，導致代謝、心血管和胃腸道疾病，並增加癌症和心理健康風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">📈</span>
+                    <p>心臟代謝風險巨大：輪班工作者心肌梗塞和冠狀動脈事件風險高20%以上，代謝症候群和糖尿病風險約高兩倍。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">😔</span>
+                    <p>心理健康受損：縱向數據顯示，不良心理健康結果風險高28%，憂鬱症狀風險高33%；台灣護理師報告憂鬱和焦慮盛行率高。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>實證策略有助益：順向輪班減少疲勞，提高注意力。夜班期間的明亮光線可降低睡意，提高警覺性。褪黑激素可縮短入睡時間。健康飲食、規律運動和壓力管理進一步減輕風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🤝</span>
+                    <p>雇主和政策支持至關重要：符合生理時鐘的排班、休息設施、健康食物獲取、健康監測和勞動保護可顯著改善輪班工作者的健康和安全。</p>
+                </div>
+            </div>
             <div class="mt-8 text-right text-gray-500 text-sm">作者：李 Ying-Li, 楊 Yi-Ning, 廖 Chia-Te</div>
         </div>
 
