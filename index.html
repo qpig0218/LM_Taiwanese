@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: The SPA uses a tabbed interface for navigation, where each tab corresponds to a chapter of the report. The main content area dynamically updates to display the selected chapter's details. This structure was chosen to allow users to easily explore specific topics of interest without overwhelming them with a single long scroll, mimicking a book's chapter structure but with instant access. Key interactions include clicking tabs to switch content and viewing embedded charts and key statistics within each chapter. -->
+    <!-- Visualization & Content Choices: 
+        - Chapter 1 (Introduction): Goal: Inform & Summarize -> Viz: KPIs, Bar Charts (Life Expectancy, Healthcare Cost), detailed text blocks, Grid of cards with icons for implementation strategies, icons for take-home messages -> Justification: High-level impact for introduction, expanded text for narrative, visual summaries for strategies and key takeaways.
+        - Chapter 2 (Assessment Tools): Goal: Inform, Compare, Organize -> Viz: KPIs, Bar Chart (Mortality Risks), HTML/CSS cards for tools, HTML/CSS flow diagram (5 A's), lists with icons, Enhanced 5A's flow with icons, grid of cards for challenges, icons for take-home messages -> Justification: Visualizing prevalence and risks, structured cards for tool comparison, enhanced flow for process, icons for challenges and key takeaways.
+        - Chapter 3 (Physiological Parameters): Goal: Inform & Organize -> Viz: Lists with icons for physiological parameters, grid of cards for biomarker categories, lists with icons for sample types, KPIs/text for digital monitoring, lists with icons for each biomarker domain, lists with icons for Taiwan considerations, clinical implementation, quality assurance, future directions, and take-home messages -> Justification: Structured lists and grids with icons are ideal for definitions, categories, and key points, enhancing readability and visual appeal. KPIs highlight specific data.
+        - Chapter 4 (Healthy Eating): Goal: Inform -> Viz: Donut Chart (TEA Mortality) -> Justification: High impact for key percentage.
+        - Chapter 5 (Physical Activity): Goal: Inform & Organize -> Viz: Key concepts, lists of benefits/challenges -> Justification: Textual explanation and structured lists for guidelines and considerations.
+        - Chapter 6 (Restorative Sleep): Goal: Inform -> Viz: KPI (Insomnia Prevalence) -> Justification: Highlights a critical problem.
+        - Chapter 7 (Stress Management): Goal: Inform & Organize -> Viz: Key concepts, lists of strategies -> Justification: Textual explanation and structured lists for complex concepts and interventions.
+        - Chapter 8 (Avoidance of Risky Substances): Goal: Inform -> Viz: KPI (Betel Nut Risk) -> Justification: Emphasizes a staggering risk.
+        - Chapter 9 (Positive Social Connection): Goal: Inform -> Viz: Donut Chart (Survival Probability) -> Justification: Clearly visualizes a powerful proportion.
+        - Chapter 10 (Sedentary Behaviors): Goal: Inform -> Viz: KPI (Occupational Sitting Mortality) -> Justification: Highlights a significant, often overlooked risk.
+        - Chapter 11 (Shift Work): Goal: Compare -> Viz: Bar Chart (Metabolic Syndrome Risk) -> Justification: Direct comparison of risk.
+        - All diagrams and layouts use HTML/CSS with Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <title>台灣生活型態醫學共識報告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            text-align: center;
+            border-bottom: 8px solid #118AB2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #073B4C;
+            line-height: 1;
+        }
+        .kpi-label {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            color: #118AB2;
+            line-height: 1.6;
+        }
+        .pillar-card {
+             background-color: white;
+             border-radius: 0.75rem;
+             padding: 1.5rem;
+             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+             text-align: center;
+             transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            background-color: #FFD166;
+        }
+        .pillar-icon {
+            font-size: 3rem;
+            line-height: 1;
+            color: #118AB2;
+            transition: color 0.3s ease;
+        }
+        .pillar-card:hover .pillar-icon {
+            color: #073B4C;
+        }
+        .data-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: #073B4C;
+            background-color: #e2e8f0;
+            border-radius: 0.5rem 0.5rem 0 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+        .tab-button.active {
+            background-color: #118AB2;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 0 0.75rem 0.75rem 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .flow-diagram-step {
+            background-color: #e0f2f7;
+            border: 2px solid #118AB2;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #073B4C;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .flow-diagram-step-icon {
+            font-size: 2.5rem;
+            color: #06D6A0;
+            margin-bottom: 0.5rem;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #118AB2;
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+        @media (min-width: 768px) {
+            .flow-diagram-step {
+                margin: 0 1rem;
+            }
+            .flow-arrow {
+                margin: 0 0.5rem;
+            }
+        }
+        .strategy-card {
+            background-color: #e0f2f7;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+        }
+        .strategy-card:hover {
+            background-color: #ceeef8;
+        }
+        .strategy-icon {
+            font-size: 3.5rem;
+            color: #073B4C;
+            margin-bottom: 0.75rem;
+        }
+        .take-home-message-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .take-home-icon {
+            font-size: 1.5rem;
+            color: #118AB2;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            line-height: 1.5; /* Align icon with text line height */
+        }
+        .challenge-card {
+            background-color: #ffebeb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #FF6B6B;
+        }
+        .challenge-icon {
+            font-size: 3rem;
+            color: #FF6B6B;
+            margin-bottom: 0.75rem;
+        }
+        .category-card {
+            background-color: #f8f8f8;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            color: #118AB2;
+            margin-bottom: 0.5rem;
+        }
+        .list-item-icon {
+            font-size: 1.25rem;
+            color: #06D6A0;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .list-item-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-[#073B4C] text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">台灣生活型態醫學共識報告</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light text-gray-300">一個為全人健康打造的文化適應新典範</p>
+        </div>
+    </header>
+
+    <nav class="bg-gray-100 shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-6 py-3 overflow-x-auto flex flex-nowrap">
+            <button class="tab-button active" data-tab="chapter1">第一章 緒論</button>
+            <button class="tab-button" data-tab="chapter2">第二章 評估工具</button>
+            <button class="tab-button" data-tab="chapter3">第三章 生理參數與生物標記</button>
+            <button class="tab-button" data-tab="chapter4">第四章 健康飲食</button>
+            <button class="tab-button" data-tab="chapter5">第五章 身體活動</button>
+            <button class="tab-button" data-tab="chapter6">第六章 修復性睡眠</button>
+            <button class="tab-button" data-tab="chapter7">第七章 壓力管理</button>
+            <button class="tab-button" data-tab="chapter8">第八章 戒除成癮物質</button>
+            <button class="tab-button" data-tab="chapter9">第九章 正向社交連結</button>
+            <button class="tab-button" data-tab="chapter10">第十章 久坐行為</button>
+            <button class="tab-button" data-tab="chapter11">第十一章 輪班工作</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="chapter1" class="tab-content active">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第一章 緒論：台灣生活型態醫學新典範</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章介紹生活型態醫學在台灣的發展，強調其作為預防、治療和逆轉慢性病主要手段的重要性，並探討其在台灣獨特文化背景下的應用。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣面臨的健康挑戰與新典範的崛起</h3>
+            <p class="text-gray-700 mb-4">台灣的醫療體系因人口老化及非傳染性疾病（NCDs）盛行率攀升而面臨日益沉重的負擔。心血管疾病、癌症和糖尿病在2023年共佔台灣總死亡人數的77%。54歲以上民眾近80%患有至少一種慢性病，而65歲以上民眾近70%患有兩種以上慢性病。這種人口結構的現實凸顯了預防性方法的重要性，以解決慢性病的根本原因而非僅僅管理症狀。</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">77%</div>
+                    <div class="kpi-label">2023年台灣死亡中，心血管疾病、癌症和糖尿病佔比</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">~80%</div>
+                    <div class="kpi-label">54歲以上台灣民眾至少罹患一種慢性病</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">~70%</div>
+                    <div class="kpi-label">65歲以上民眾至少罹患兩種慢性病</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">全球健康挑戰，包括COVID-19疫情，進一步凸顯了生活型態介入的重要性。為應對此公共衛生危機，「健康台灣」倡議推出了「888計畫」，旨在將80%患有「三高」（高血壓、高血糖或高血脂）的患者納入整合照護網絡，為80%的患者提供生活型態諮詢，並在八年內使80%的參與者達到風險因素控制。這項倡議與生活型態醫學的原則高度契合。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生活型態醫學的實證影響與台灣在地脈絡</h3>
+            <p class="text-gray-700 mb-4">一項針對19,893名台灣參與者的全國性世代研究顯示，採納五項健康生活型態因素能帶來顯著的健康效益和醫療成本節省，凸顯了生活型態改變對個人健康結果和醫療系統永續性的深遠影響。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">平均餘命增加</h4>
+                    <div class="chart-container">
+                        <canvas id="lifeExpectancyChart"></canvas>
+                    </div>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">年度醫療支出減少</h4>
+                    <div class="chart-container">
+                        <canvas id="healthcareCostChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">除了統計數據，台灣獨特的文化背景也帶來機遇與挑戰。中醫的平衡與預防原則與生活型態醫學哲學契合。然而，快速的現代化也引入了西方飲食模式、久坐行為，以及夜市美食和高壓工作/學習文化等文化影響，這些都加劇了慢性病負擔。因此，將生活型態醫學適應於台灣的環境，需要一種細緻且具文化敏感性的方法。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生活型態醫學的六大支柱與台灣在地適應</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學以六大基礎支柱為核心，每一項都需要為台灣的有效實施進行文化適應：</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
+                <div class="pillar-card">
+                    <div class="pillar-icon">🍽️</div>
+                    <h3 class="font-bold mt-4 text-lg text-[#073B4C]">健康飲食</h3>
+                    <p class="text-sm text-gray-600 mt-2">以全食物、植物性為主，適應夜市文化。</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🏃</div>
+                    <h3 class="font-bold mt-4 text-lg text-[#073B4C]">規律身體活動</h3>
+                    <p class="text-sm text-gray-600 mt-2">克服久坐生活，利用YouBike、太極拳等。</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">😴</div>
+                    <h3 class="font-bold mt-4 text-lg text-[#073B4C]">修復性睡眠</h3>
+                    <p class="text-sm text-gray-600 mt-2">應對24小時經濟與高壓工作文化。</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🧘</div>
+                    <h3 class="font-bold mt-4 text-lg text-[#073B4C]">壓力管理</h3>
+                    <p class="text-sm text-gray-600 mt-2">整合傳統冥想、太極拳與自然連結。</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🚭</div>
+                    <h3 class="font-bold mt-4 text-lg text-[#073B4C]">戒除成癮物質</h3>
+                    <p class="text-sm text-gray-600 mt-2">特別關注檳榔嚼食、菸酒等在地習慣。</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🤝</div>
+                    <h3 class="font-bold mt-4 text-lg text-[#073B4C]">正向社交連結</h3>
+                    <p class="text-sm text-gray-600 mt-2">利用家庭與社區優勢，應對都市化孤立。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣有效實施生活型態醫學的策略</h3>
+            <p class="text-gray-700 mb-4">在台灣成功實施生活型態醫學需要多面向的方法，涵蓋個人、醫療體系和社會層面：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏥</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">醫療體系整合</h4>
+                    <p class="text-sm text-gray-600 mt-2">將LM納入醫學教育、持續教育，推動健保給付與品質指標。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏘️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社區基礎介入</h4>
+                    <p class="text-sm text-gray-600 mt-2">與學校、職場、社區合作，創造健康環境。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🎭</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">文化適應與敏感性</h4>
+                    <p class="text-sm text-gray-600 mt-2">理解尊重文化習俗，提供在地化健康教育。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📱</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">科技與研究</h4>
+                    <p class="text-sm text-gray-600 mt-2">利用智慧型手機、數位健康，進行本土實證研究。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學為解決台灣最緊迫的醫療挑戰提供了一個全面、基於實證的方法。透過專注於六大支柱，LM提供了一個解決慢性病根本原因的框架，同時尊重並利用台灣獨特的文化優勢。無論是全球還是本土的證據都清楚表明：其潛在效益—包括改善人口健康、降低醫療成本和提升生活品質—使得廣泛採用LM成為必要且有價值。成功的實施將需要醫療提供者、政策制定者、研究人員和社區組織的持續協作努力，為台灣鋪平通往更健康、更永續未來的道路。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💡</span>
+                    <p>生活型態醫學是運用治療性生活型態介入來解決慢性病根本原因的醫學專業。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚨</span>
+                    <p>非傳染性疾病主導台灣的健康格局，其人口老化使得預防性方法變得刻不容緩。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">📊</span>
+                    <p>台灣研究顯示，健康生活型態可增加超過7年的平均餘命，並減少近30%的醫療費用。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>生活型態醫學的六大支柱（營養、身體活動、睡眠、壓力、戒除成癮物質、社交連結）提供了一個全面的健康框架。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🤝</span>
+                    <p>在台灣成功實施有賴於文化適應、臨床醫師教育、社區參與以及像「健康台灣」倡議這樣的支持性政策。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💖</span>
+                    <p>強健的社交連結對生存的重要性與戒菸相當。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">⚠️</span>
+                    <p>文化特定的風險，如檳榔嚼食，需要有針對性、敏感的公共衛生策略。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：廖 Chia-Te, 蔡 Meng-Hsiu</div>
+        </div>
+
+        <div id="chapter2" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第二章 生活型態醫學評估工具</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">生活型態醫學評估（LMA）是一個系統性的過程，用於評估生活型態醫學六大支柱的日常行為如何影響健康。它強調透過可改變的行為來預防和延遲慢性病，並在台灣文化背景下進行適應。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣慢性病負擔與生活型態風險</h3>
+            <p class="text-gray-700 mb-4">隨著人口老化和經濟發展，台灣非傳染性疾病負擔日益加重。多重慢性病盛行率顯著上升，且不健康的生活型態與高死亡風險密切相關。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">多重慢性病盛行率趨勢 (2000-2010)</h4>
+                    <div class="chart-container">
+                        <canvas id="multiChronicConditionChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">台灣成年人多重慢性病盛行率從2000年的9.6%上升到2010年的17.1%。65歲以上人群中，此比例更高達64.5%。</p>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">不健康生活型態與死亡風險增加</h4>
+                    <div class="chart-container">
+                        <canvas id="lifestyleMortalityRiskChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">吸菸者全因死亡率高33%；蔬果攝取不足使心血管死亡率增43%、全因死亡率增22%；身體活動不足使心血管死亡率增逾一倍。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">台灣的文化背景為生活型態評估帶來機遇與挑戰。傳統中醫強調平衡與預防，家庭式用餐和社區運動團體支持健康生活。然而，夜市飲食、高鈉調味品、長時間工作、輪班制和檳榔嚼食等現代影響，則促進不健康行為。有效的LMA必須量化這些行為並考慮社會文化習俗。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生活型態評估工具 (LMA) 的目標</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="data-card flex flex-col items-center p-4 text-center">
+                    <span class="text-5xl text-[#06D6A0] mb-3">📋</span>
+                    <h4 class="font-bold text-lg text-[#073B4C]">全面評估</h4>
+                    <p class="text-sm text-gray-600">檢視六大支柱行為，納入文化相關因素。</p>
+                </div>
+                <div class="data-card flex flex-col items-center p-4 text-center">
+                    <span class="text-5xl text-[#118AB2] mb-3">📈</span>
+                    <h4 class="font-bold text-lg text-[#073B4C]">動態監測</h4>
+                    <p class="text-sm text-gray-600">定期評估，追蹤進度，調整計畫。</p>
+                </div>
+                <div class="data-card flex flex-col items-center p-4 text-center">
+                    <span class="text-5xl text-[#FFD166] mb-3">👤</span>
+                    <h4 class="font-bold text-lg text-[#073B4C]">個人化諮詢</h4>
+                    <p class="text-sm text-gray-600">識別風險因素，提供量身定制介入。</p>
+                </div>
+                <div class="data-card flex flex-col items-center p-4 text-center">
+                    <span class="text-5xl text-[#FF6B6B] mb-3">🔬</span>
+                    <h4 class="font-bold text-lg text-[#073B4C]">研究與品質改進</h4>
+                    <p class="text-sm text-gray-600">匯總數據，支持公衛規劃與評估。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">儘管LMA工具在西方背景下發展，但其在台灣的應用需克服文化和語言適應的挑戰，並輔以客觀測量以提高準確性。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">當代評估技術：數位工具的潛力與局限</h3>
+            <p class="text-gray-700 mb-4">智慧型手機應用程式和穿戴式設備已改變生活型態評估，能收集身體活動、睡眠、飲食和壓力等即時數據。例如，Fitbit追蹤器結合網路自我監測，可顯著增加身體活動量。然而，僅靠穿戴式設備難以維持長期行為改變，且數位獲取差異、數據隱私和設備準確性仍是挑戰。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">Fitbit試驗：MVPA與步數增加</h4>
+                    <div class="chart-container">
+                        <canvas id="fitbitMVPAChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">為期16週的試驗顯示，Fitbit使用者每週中等至劇烈身體活動(MVPA)增加62分鐘，步數增加789步。</p>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">智慧型手機介入對HbA1c的影響</h4>
+                    <div class="chart-container">
+                        <canvas id="smartphoneHbA1cChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">針對非傳染性疾病患者的智慧型手機介入，在8項試驗中有5項顯示糖化血色素(HbA1c)顯著改善。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">驗證過的生活型態評估工具概覽</h3>
+            <p class="text-gray-700 mb-4">多種國際LMA工具已開發並驗證，台灣在地化版本也應運而生，以更好地反映當地文化和風險因素。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-xl text-[#073B4C] mb-2">FANTASTIC 問卷</h4>
+                    <p class="text-gray-600 text-sm">25項生活型態行為評估，內部一致性良好 (Cronbach’s α ≈ 0.80)。</p>
+                    <ul class="list-disc list-inside text-gray-600 text-sm mt-2">
+                        <li>涵蓋家庭/朋友、活動、營養、菸草/毒素、酒精、睡眠/壓力、性格、洞察力和職業。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-xl text-[#073B4C] mb-2">HPLP-II 量表</h4>
+                    <p class="text-gray-600 text-sm">50項健康促進行為評估，高內部一致性 (Cronbach’s α = 0.94)。</p>
+                    <ul class="list-disc list-inside text-gray-600 text-sm mt-2">
+                        <li>衡量健康責任、身體活動、營養、精神成長、人際關係和壓力管理。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-xl text-[#073B4C] mb-2">HELP / HELP-T 量表</h4>
+                    <p class="text-gray-600 text-sm">專為老年人設計，HELP-T為台灣在地化版本，具良好信度。</p>
+                    <ul class="list-disc list-inside text-gray-600 text-sm mt-2">
+                        <li>評估功能活動、營養、社會參與、個人保健、身體活動、壓力管理和目的感。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-xl text-[#073B4C] mb-2">HLPCQ 問卷</h4>
+                    <p class="text-gray-600 text-sm">26項自我賦權和日常健康實踐評估，適用於壓力管理。</p>
+                    <ul class="list-disc list-inside text-gray-600 text-sm mt-2">
+                        <li>識別飲食選擇、危害避免、日常習慣、有組織運動和社交/心理平衡五大因素。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4 col-span-full md:col-span-2">
+                    <h4 class="font-bold text-xl text-[#073B4C] mb-2">LMA 篩查工具與台灣在地化版本</h4>
+                    <p class="text-gray-600 text-sm">美國生活型態醫學學會開發的21項工具，台灣版增添檳榔問題，共22項。</p>
+                    <ul class="list-disc list-inside text-gray-600 text-sm mt-2">
+                        <li>涵蓋連結性、營養、運動、恢復（睡眠和壓力）和物質使用。</li>
+                        <li>提供領域分數和0-50的總生活型態分數，具文化敏感性回饋。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">臨床應用與實施：5A 諮詢框架</h3>
+            <p class="text-gray-700 mb-4">將LMA整合到常規照護中，需要周密的流程設計、人員培訓和文化敏感性。5A框架提供行為諮詢的結構化方法：</p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-12">
+                <div class="flow-diagram-step">
+                    <span class="flow-diagram-step-icon">❓</span>
+                    詢問 (Ask)
+                    <p class="text-sm font-normal mt-1">詢問生活型態行為</p>
+                </div>
+                <div class="flow-arrow">➡️</div>
+                <div class="flow-diagram-step">
+                    <span class="flow-diagram-step-icon">💡</span>
+                    建議 (Advise)
+                    <p class="text-sm font-normal mt-1">告知患者風險與益處</p>
+                </div>
+                <div class="flow-arrow">➡️</div>
+                <div class="flow-diagram-step">
+                    <span class="flow-diagram-step-icon">🎯</span>
+                    評估 (Assess)
+                    <p class="text-sm font-normal mt-1">評估改變的準備程度</p>
+                </div>
+                <div class="flow-arrow">➡️</div>
+                <div class="flow-diagram-step">
+                    <span class="flow-diagram-step-icon">🤝</span>
+                    協助 (Assist)
+                    <p class="text-sm font-normal mt-1">協助目標設定與技能發展</p>
+                </div>
+                <div class="flow-arrow">➡️</div>
+                <div class="flow-diagram-step">
+                    <span class="flow-diagram-step-icon">🗓️</span>
+                    安排 (Arrange)
+                    <p class="text-sm font-normal mt-1">安排後續支持</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">文化適應性可提高諮詢有效性，例如建議夜市健康選擇、承認檳榔的社會角色、推廣太極拳等本土習俗，並鼓勵家庭成員參與。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">挑戰與限制</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學評估工具在實施過程中面臨多重挑戰：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="challenge-card">
+                    <div class="challenge-icon">📝</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">自我報告偏差</h4>
+                    <p class="text-sm text-gray-600 mt-2">回憶錯誤和社會期望可能影響數據準確性。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🌍</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">文化與語言適應</h4>
+                    <p class="text-sm text-gray-600 mt-2">西方工具可能不符台灣價值觀，需嚴格在地化。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">⏳</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">時間與資源限制</h4>
+                    <p class="text-sm text-gray-600 mt-2">繁忙臨床環境下，全面評估面臨挑戰。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">📶</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">數位落差</h4>
+                    <p class="text-sm text-gray-600 mt-2">老年人及農村居民可能缺乏數位工具使用機會。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🎓</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">醫療提供者培訓</h4>
+                    <p class="text-sm text-gray-600 mt-2">需加強LM原則、動機式晤談與行為改變技術培訓。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🔒</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">隱私問題</h4>
+                    <p class="text-sm text-gray-600 mt-2">數位監測需明確數據治理與患者同意。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學評估是基於實證的個人化預防性護理的基礎。在台灣，文化適應的LMA工具對於識別可改變的行為、量身定制介入措施和監測進度至關重要。數位技術補充傳統問卷，但需深思熟慮和公平整合。持續研究、品質改進和創新數據整合將提高生活型態介入的精準性和有效性。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>LMA系統性評估六大支柱行為，工具必須適應台灣文化。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">📈</span>
+                    <p>台灣慢性病和多重共病症增加，不健康生活型態顯著提高死亡風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💰</span>
+                    <p>採納多種健康生活型態行為可延長預期壽命逾七年，並減少約四分之一醫療費用。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">📱</span>
+                    <p>行動和穿戴式技術提供即時評估和回饋，但需行為支持才能維持改善。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🔬</span>
+                    <p>經驗證的問卷（如FANTASTIC, HPLP-II, HELP/HELP-T, HLPCQ, 21項LMA）具良好信度與效度，台灣在地化22項LMA具初步可靠性。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🏥</span>
+                    <p>臨床實施LMA需預約前問卷、重複評估、5A諮詢框架和文化適應，並整合電子健康記錄。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：杜 Han Siong, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter3" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第三章 生理參數與生物標記</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討生理參數與生物標記如何作為客觀指標，量化生活型態行為對健康的影響，並強調其在台灣精準健康照護中的應用。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生理參數：定義與範疇</h3>
+            <p class="text-gray-700 mb-4">生理參數是反映主要身體系統功能的量化特徵，對生活型態改變有反應，並適用於臨床常規監測：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">❤️</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">心血管參數</h4>
+                    <p class="text-sm text-gray-600">血壓、靜息心率、心率變異性、心電圖、血管功能。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🫁</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">呼吸參數</h4>
+                    <p class="text-sm text-gray-600">肺活量測量（用力肺活量、用力呼氣量）、血氧飽和度。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">⚖️</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">代謝參數</h4>
+                    <p class="text-sm text-gray-600">身體質量指數（BMI）、腰圍、身體組成、靜息代謝率。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🧠</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">神經學參數</h4>
+                    <p class="text-sm text-gray-600">認知表現、自主神經系統平衡、睡眠結構。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">💪</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">肌肉骨骼評估</h4>
+                    <p class="text-sm text-gray-600">肌肉力量、耐力、柔韌性、骨密度。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生物標記：定義、類別與臨床意義</h3>
+            <p class="text-gray-700 mb-4">生物標記是客觀測量的指標，提供生活型態介入引起生理變化的客觀證據。它們不僅用於診斷，還能用於風險分層、監測治療反應和預測治療結果。監管機構將生物標記分為七大類：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="category-card">
+                    <div class="category-icon">⚠️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">易感性/風險標記</h4>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🔍</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">診斷標記</h4>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">📊</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">監測標記</h4>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🔮</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">預後標記</h4>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">➡️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">預測標記</h4>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">💊</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">藥效學/反應標記</h4>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🛡️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">安全標記</h4>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">例如，糖化血色素 (HbA1c) 是糖尿病的診斷和監測生物標記，而高敏感C反應蛋白 (hs-CRP) 則作為心血管事件的預後標記。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">樣本類型與測量方法</h3>
+            <p class="text-gray-700 mb-4">生物標記分析使用多種生物樣本和嚴格的測量方法：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🩸</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">生物樣本</h4>
+                    <p class="text-sm text-gray-600">血液（最常見）、唾液、頭髮、尿液、糞便、組織活檢和影像學。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🧪</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">檢測驗證</h4>
+                    <p class="text-sm text-gray-600">嚴格的品質控制，包括分析驗證（準確性、精密度）和技術驗證（敏感性、特異性）。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">⌚</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">數位監測</h4>
+                    <p class="text-sm text-gray-600">穿戴式設備和行動應用程式可持續監測生理參數，提供客觀數據和即時回饋。</p>
+                </div>
+            </div>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">Fitbit試驗：MVPA與步數增加</h4>
+                <p class="text-gray-600 text-sm mt-4">為期16週的試驗顯示，Fitbit使用者每週中等至劇烈身體活動(MVPA)增加62分鐘，步數增加789步，依從性超過95%。</p>
+                <div class="chart-container">
+                    <canvas id="fitbitMVPAChart"></canvas>
+                </div>
+            </div>
+
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生活型態醫學生物標記框架：六大領域</h3>
+            <p class="text-gray-700 mb-4">LMA將生理參數和生物標記整合到與生活型態醫學六大支柱相對應的六個領域：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4">
+                    <div class="category-icon">🕰️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">生理年齡評估</h4>
+                    <p class="text-sm text-gray-600">端粒長度、表觀遺傳時鐘（DNA甲基化模式）、hs-CRP、ICAM-1、GDF-15、BDNF等。</p>
+                </div>
+                <div class="data-card p-4">
+                    <div class="category-icon">🍎</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">營養與代謝評估</h4>
+                    <p class="text-sm text-gray-600">BMI、腰圍、空腹血糖、胰島素阻抗、血脂、HbA1c、微量營養素等。</p>
+                </div>
+                <div class="data-card p-4">
+                    <div class="category-icon">🏃‍♀️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">身體健康與適能評估</h4>
+                    <p class="text-sm text-gray-600">心肺適能（CRF）、肌肉力量（握力、坐站測試）、骨密度、步數。</p>
+                </div>
+                <div class="data-card p-4">
+                    <div class="category-icon">🔥</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">炎症與免疫功能評估</h4>
+                    <p class="text-sm text-gray-600">hs-CRP、介白素-6（IL-6）、腫瘤壞死因子-α（TNF-α）、白細胞計數。</p>
+                </div>
+                <div class="data-card p-4">
+                    <div class="category-icon">🧘‍♂️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">壓力反應評估</h4>
+                    <p class="text-sm text-gray-600">皮質醇（唾液、血液、尿液、頭髮）、心率變異性（HRV）、DHEA/皮質醇比率。</p>
+                </div>
+                <div class="data-card p-4">
+                    <div class="category-icon">🌙</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">睡眠品質評估</h4>
+                    <p class="text-sm text-gray-600">褪黑激素、BDNF水平、總睡眠時間、睡眠效率、睡眠階段。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣在地考量</h3>
+            <p class="text-gray-700 mb-4">在台灣實施LM生物標記評估需考慮遺傳、環境和文化因素：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🧬</span>**遺傳結構：** 漢族為主，但有不同遺傳血統的亞群（河洛、客家、外省），可能影響生物標記參考範圍。</li>
+                <li class="list-item-container"><span class="list-item-icon">🏭</span>**環境暴露：** 空氣污染、工業化學品和高環境溫度可能影響氧化壓力和炎症標記。</li>
+                <li class="list-item-container"><span class="list-item-icon">🥢</span>**文化習俗：** 檳榔嚼食、夜市飲食習慣和長時間工作會影響代謝、壓力和睡眠生物標記。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌐</span>**數位普及與落差：** 智慧型手機和醫療技術普及，但也存在城鄉和年齡層之間的數位素養和獲取差異。</li>
+                <li class="list-item-container"><span class="list-item-icon">🏦</span>**本土生物資料庫：** 社會環境與老化生物標記研究（SEBAS）和台灣人體生物資料庫（Taiwan Biobank）提供在地相關的常模數據。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">臨床實施與整合</h3>
+            <p class="text-gray-700 mb-4">有效運用生理參數和生物標記取決於周密的測試選擇、解釋和整合到患者照護中：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">✅</span>**測試選擇：** 優先選擇具有既定分析和臨床有效性的生物標記。</li>
+                <li class="list-item-container"><span class="list-item-icon">🧠</span>**解釋：** 小範圍內的變化在特定情境下可能具有臨床意義。</li>
+                <li class="list-item-container"><span class="list-item-icon">🗣️</span>**結果溝通：** 強調可操作的見解，賦予患者改變行為和追蹤進度的能力。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤝</span>**跨學科合作：** 醫師、營養師、運動生理學家和心理學家之間的合作可增強解釋並促進全人照護。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">品質保證與標準化</h3>
+            <p class="text-gray-700 mb-4">品質保證對於生物標記的可靠使用至關重要：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🔬</span>**分析前因素：** 禁食狀態、時間、樣本採集、處理和儲存會顯著影響結果。</li>
+                <li class="list-item-container"><span class="list-item-icon">⚙️</span>**分析品質控制：** 需要校準的儀器、驗證的檢測和參與能力測試。</li>
+                <li class="list-item-container"><span class="list-item-icon">📝</span>**分析後品質保證：** 包括結果報告、參考範圍選擇和解釋支持。</li>
+                <li class="list-item-container"><span class="list-item-icon">📱</span>**數位設備驗證：** 針對準確性進行驗證研究至關重要。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">未來方向與新興技術</h3>
+            <p class="text-gray-700 mb-4">LM生物標記評估的未來將由技術進步和系統生物學塑造：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">⚡</span>**床邊檢測設備：** 實現葡萄糖、膽固醇、HbA1c和炎症標記的快速、分散式測量。</li>
+                <li class="list-item-container"><span class="list-item-icon">🔄</span>**連續監測技術：** 如穿戴式葡萄糖和血壓感測器，可即時追蹤生理反應。</li>
+                <li class="list-item-container"><span class="list-item-icon">🧬</span>**多組學方法：** 基因組學、轉錄組學、蛋白質組學、代謝組學和微生物組學提供全面分子見解。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤖</span>**人工智慧與機器學習：** 整合複雜生物標記數據與臨床和行為資訊，預測疾病風險和定制治療建議。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">生理參數和生物標記是循證生活型態醫學的基石。它們將主觀的生活型態行為轉化為客觀數據，從而實現風險量化、個人化介入和治療效果監測。在台灣，將這些測量與文化理解和針對特定人群的研究相結合，可增強生活型態醫學的相關性和有效性。持續投資於生物資料庫、數位健康基礎設施、分析驗證和跨學科培訓，將增強醫療系統利用生物標記進行預防和治療的能力。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💡</span>
+                    <p>生理參數和生物標記將生活型態行為轉化為客觀測量，實現個人化和循證介入。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🏷️</span>
+                    <p>生物標記分為易感性、診斷、監測、預後、預測、藥效學和安全標記。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🧪</span>
+                    <p>準確的生物標記測量需要嚴格的分析驗證和品質保證。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🕰️</span>
+                    <p>端粒長度和表觀遺傳時鐘反映生理老化，並受吸菸、失眠和身體活動的影響。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🍎</span>
+                    <p>HbA1c和血脂譜評估代謝健康；HbA1c升高預測急性冠狀動脈症候群的死亡率。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💪</span>
+                    <p>高心肺適能和肌肉力量可降低死亡風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🔥</span>
+                    <p>hs-CRP和IL-6是預測心血管事件的關鍵炎症生物標記。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🧘</span>
+                    <p>皮質醇、HRV和DHEA/皮質醇比率指示壓力反應；慢性壓力會升高促炎細胞因子。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🌙</span>
+                    <p>褪黑激素和BDNF提供睡眠品質的見解；失眠且睡眠時間短會降低BDNF水平。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🇹🇼</span>
+                    <p>台灣獨特的遺傳結構、文化習俗和豐富的生物資料庫資源，需要針對特定人群的解釋並提供研究機會。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：蔡 Ya-Wen, 蔡 Wen-Hsin, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter4" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第四章 健康飲食</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">健康飲食是生活型態醫學的基石，因為飲食模式深刻影響代謝健康、身體組成、免疫功能和慢性病風險。本章將探討台灣飲食相關的挑戰與「健康台式飲食法」(TEA) 的實證。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣飲食相關的健康挑戰</h3>
+            <p class="text-gray-700 mb-4">台灣面臨日益嚴峻的飲食相關非傳染性疾病疫情。超過一半的台灣成年人超重或肥胖，兒童中也有約三分之一的男孩和四分之一的女孩超重或肥胖。糖尿病也是導致發病率和死亡率的主要原因，並大幅增加醫療支出。因此，解決不良飲食習慣是台灣公共衛生的優先事項，也是生活型態醫學的重要支柱。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">~50%↑</div>
+                    <div class="kpi-label">台灣成年人超重或肥胖比例</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">~33%</div>
+                    <div class="kpi-label">台灣兒童超重或肥胖比例 (男孩)</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">台灣的傳統飲食歷史上以豐富的蔬菜、豆製品、海鮮和茶為主。然而，快速的社會經濟發展和全球化改變了這些模式，增加了精緻穀物、加工食品、含糖飲料和西式快餐的消費。這些飲食轉變與肥胖、糖尿病和心血管疾病的上升趨勢同時發生。生活型態醫學旨在保留傳統飲食的健康方面，同時整合現代營養科學以支持人口健康。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">健康飲食在生活型態醫學中的基礎</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學中的健康飲食強調飲食模式而非單一營養素。全球組織如世界衛生組織建議每日攝取至少400克蔬果，限制總脂肪、游離糖和鹽的攝入。台灣衛福部也將這些原則編入《每日飲食指南》，將食物分為六大類並建議最低每日份量。更好地遵循《每日飲食指南》與骨質疏鬆症風險降低39%相關。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">WHO 飲食建議 (每日)</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🍎</span>至少 400 克水果和蔬菜</li>
+                        <li class="list-item-container"><span class="list-item-icon">🧈</span>總脂肪 < 30% 能量 (飽和脂肪 < 10%, 反式脂肪 < 1%)</li>
+                        <li class="list-item-container"><span class="list-item-icon">🍬</span>游離糖 < 10% 能量 (理想 < 5%)</li>
+                        <li class="list-item-container"><span class="list-item-icon">🧂</span>鹽攝入量 < 5 克</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">台灣衛福部《每日飲食指南》六大類</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🍚</span>全穀雜糧</li>
+                        <li class="list-item-container"><span class="list-item-icon">🥚</span>豆魚蛋肉</li>
+                        <li class="list-item-container"><span class="list-item-icon">🥛</span>乳品</li>
+                        <li class="list-item-container"><span class="list-item-icon">🥦</span>蔬菜</li>
+                        <li class="list-item-container"><span class="list-item-icon">🍓</span>水果</li>
+                        <li class="list-item-container"><span class="list-item-icon">🌰</span>油脂與堅果種子</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">飲食模式與疾病風險降低</h3>
+            <p class="text-gray-700 mb-4">經實證的飲食模式通常具有共同特徵：豐富的植物性食物、適量魚類和瘦肉蛋白、偏好不飽和脂肪，以及極少攝取超加工食品、添加糖和過多鹽。地中海飲食和DASH飲食是典範。植物性飲食也帶來顯著益處，例如台灣的一項世代研究報告，素食者缺血性中風和總中風的風險顯著降低。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">地中海飲食與全因死亡率降低</h4>
+                    <div class="chart-container">
+                        <canvas id="mediterraneanDietMortalityChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">高度遵循地中海飲食與全因死亡率降低21-56%相關，心血管死亡率顯著降低。</p>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">DASH飲食對血壓的影響</h4>
+                    <div class="chart-container">
+                        <canvas id="dashDietBloodPressureChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">DASH飲食可使收縮壓降低約6.7 mmHg，舒張壓降低3.5 mmHg (結合運動和體重管理可降低約16 mmHg)。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">這些益處的生理機制包括改善胰島素敏感性、血脂和血壓，減少全身性炎症和氧化壓力，支持腸道微生物多樣性，以及有利地調節飽足感激素。生活型態醫學強調這些模式的靈活、文化適應性應用，以促進可持續的行為改變。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">健康台式飲食法 (TEA)</h3>
+            <p class="text-gray-700 mb-4">「健康台式飲食法」(TEA) 整合了台灣傳統飲食習慣與現代營養科學。它強調多攝取植物性食物（蔬菜、水果、全穀物、堅果、種子和茶）和水產食物（魚類和海鮮），同時不鼓勵大理石紋或高度加工肉類、油炸和高脂肪食物、含糖零食和含糖飲料。TEA模式與顯著較低的死亡率相關。</p>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">TEA 模式與全因死亡風險降低</h4>
+                <p class="text-gray-600 text-sm mt-4">遵循最健康的TEA模式，全因死亡風險顯著降低。</p>
+                <div class="chart-container">
+                    <canvas id="teaMortalityChart"></canvas>
+                </div>
+            </div>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">TEA 模式與心血管死亡風險降低</h4>
+                <p class="text-gray-600 text-sm mt-4">遵循最健康的TEA模式，心血管死亡風險顯著降低。</p>
+                <div class="chart-container">
+                    <canvas id="teaCardiovascularMortalityChart"></canvas>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">TEA 核心組成要素與實證效益</h3>
+            <p class="text-gray-700 mb-4">TEA模式鼓勵攝取以下核心食物類別，每種都具有獨特的健康益處：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🥦</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">植物性食物</h4>
+                    <p class="text-sm text-gray-600">蔬菜、水果、豆類提供膳食纖維、維生素、礦物質和植物化學物質。鼓勵每日至少五份蔬果。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🥛</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">黃豆製品</h4>
+                    <p class="text-sm text-gray-600">豆腐、豆豉、豆漿等提供優質蛋白質和異黃酮，可能改善血脂和降低癌症風險。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🐟</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">水產食物</h4>
+                    <p class="text-sm text-gray-600">魚類和海鮮富含Omega-3脂肪酸和優質蛋白質。每日增加20克魚類攝取，心血管死亡率降低4%。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🍵</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">茶</h4>
+                    <p class="text-sm text-gray-600">綠茶、烏龍茶、普洱茶富含多酚，具抗氧化和抗炎作用，可能降低血壓。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🌾</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">全穀物、堅果和種子</h4>
+                    <p class="text-sm text-gray-600">提供纖維和微量營養素。高全穀物攝取與心血管疾病風險降低16%相關。</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">魚類攝取與心血管死亡率降低</h4>
+                    <div class="chart-container">
+                        <canvas id="fishConsumptionChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">每增加20克/天的魚類攝取，心血管死亡率降低4%。</p>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">全穀物攝取與心血管疾病風險降低</h4>
+                    <div class="chart-container">
+                        <canvas id="wholeGrainChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">高全穀物攝取與心血管疾病風險降低16%，每增加90克/天可降低22%。</p>
+                </div>
+                <div class="data-card md:col-span-2">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">堅果攝取與心臟病及死亡率降低</h4>
+                    <div class="chart-container">
+                        <canvas id="nutConsumptionChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">每日額外攝取28克堅果，冠心病風險降低29%，心血管疾病風險降低21%，全因死亡率降低22%。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">實施策略與文化整合</h3>
+            <p class="text-gray-700 mb-4">臨床醫生應評估患者的飲食習慣、文化偏好和烹飪技能，並強調TEA的文化相關性。實用指導包括食譜修改、膳食計畫模板、份量控制和購物技巧。家庭參與至關重要，社區倡議（如學校、職場和當地餐館推廣TEA選項）可增加可及性和社會支持。數位工具和飲食追蹤應用程式可強化行為改變。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">👩‍🍳</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">實用指導</h4>
+                    <p class="text-sm text-gray-600 mt-2">食譜修改、膳食計畫、份量控制、購物技巧。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">👨‍👩‍👧‍👦</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">家庭參與</h4>
+                    <p class="text-sm text-gray-600 mt-2">鼓勵家庭成員共同參與飲食諮詢，促進家庭一致性改變。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社區倡議</h4>
+                    <p class="text-sm text-gray-600 mt-2">在學校、職場和餐館推廣TEA兼容選項，增加可及性。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📱</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">數位工具</h4>
+                    <p class="text-sm text-gray-600 mt-2">利用飲食追蹤應用程式等數位工具強化行為改變。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏮</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">文化智慧整合</h4>
+                    <p class="text-sm text-gray-600 mt-2">結合中醫概念、季節性飲食、共食和藥膳，創造具文化共鳴的健康訊息。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">營養科學基礎</h3>
+            <p class="text-gray-700 mb-4">最佳飲食強調巨量營養素的平衡和品質。全穀物、蔬菜、水果和豆類提供複雜碳水化合物和膳食纖維。海鮮、豆製品和適量禽蛋提供優質蛋白質。魚類、堅果、種子和植物油提供健康脂肪。這些成分協同作用，降低慢性病風險。</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🍚</span>**巨量營養素與碳水化合物品質：** 強調全穀物、蔬果和豆類，改善血糖控制，降低膽固醇。</li>
+                <li class="list-item-container"><span class="list-item-icon">🍖</span>**蛋白質與脂肪來源：** 優先選擇海鮮、豆製品等植物性蛋白質，限制飽和脂肪和反式脂肪。</li>
+                <li class="list-item-container"><span class="list-item-icon">🍊</span>**微量營養素、植物化學物質與纖維：** 確保足夠的維生素、礦物質、抗氧化劑和膳食纖維攝取。</li>
+                <li class="list-item-container"><span class="list-item-icon">📚</span>**實證飲食模式：** 地中海飲食、DASH飲食和植物性飲食均證實能降低心血管事件、高血壓和死亡率。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">解決常見障礙與挑戰</h3>
+            <p class="text-gray-700 mb-4">患者在採納健康飲食時常遇到挑戰，需要針對性策略：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="challenge-card">
+                    <div class="challenge-icon">⏰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">時間限制</h4>
+                    <p class="text-sm text-gray-600 mt-2">透過批量烹飪、餐點準備和簡單食譜來解決。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">💸</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">成本考量</h4>
+                    <p class="text-sm text-gray-600 mt-2">強調經濟實惠的主食（如米飯、時令蔬菜、豆腐）和長期醫療費用節省。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🔪</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">烹飪技能有限</h4>
+                    <p class="text-sm text-gray-600 mt-2">透過烹飪課程、教學影片和社區計畫解決。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🛒</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">食物可及性</h4>
+                    <p class="text-sm text-gray-600 mt-2">識別當地農夫市集、社區菜園和送貨服務。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🍜</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">文化偏好</h4>
+                    <p class="text-sm text-gray-600 mt-2">尊重傳統菜餚，專注於份量控制和更健康的烹飪方法。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🗣️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社交影響</h4>
+                    <p class="text-sm text-gray-600 mt-2">教導堅定溝通，並在聚會中提供更健康的替代品。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">📰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">衝突的營養資訊</h4>
+                    <p class="text-sm text-gray-600 mt-2">引導患者至權威來源，培養批判性思維。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">💊</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">醫療狀況與藥物</h4>
+                    <p class="text-sm text-gray-600 mt-2">需要協調照護，確保飲食建議安全且適當。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">特殊人群與考量</h3>
+            <p class="text-gray-700 mb-4">健康飲食介入必須根據特定群體的需求進行調整：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">👵</span>**老年人：** 營養密度高的食物、足夠的蛋白質和水分。</li>
+                <li class="list-item-container"><span class="list-item-icon">🧒</span>**兒童和青少年：** 平衡飲食以支持生長和認知發展，家庭和學校參與至關重要。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤰</span>**孕婦和哺乳期婦女：** 需要額外的能量、蛋白質、鐵、葉酸和鈣。</li>
+                <li class="list-item-container"><span class="list-item-icon">🩺</span>**慢性病患者：** 可能需要調整巨量營養素分佈和特定營養素的監測。</li>
+                <li class="list-item-container"><span class="list-item-icon">🏋️</span>**運動員和身體活躍者：** 能量和蛋白質需求較高，需將營養與訓練計畫整合。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌱</span>**素食者和純素食者：** 確保維生素B12、鐵、鋅和Omega-3脂肪酸的足夠攝取。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤧</span>**食物過敏或不耐受者：** 需要安全的替代品以維持營養充足。</li>
+                <li class="list-item-container"><span class="list-item-icon">👨‍👩‍👧‍👦</span>**低收入人群：** 可能面臨經濟和可及性障礙，需要社區支持和預算友善的健康飲食教育。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">與其他生活型態醫學支柱的整合</h3>
+            <p class="text-gray-700 mb-4">營養與其他生活型態醫學支柱協同作用，共同促進健康：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🏃</span>**身體活動：** 增強胰島素敏感性和能量平衡。</li>
+                <li class="list-item-container"><span class="list-item-icon">😴</span>**充足睡眠：** 調節食慾激素，減少對高能量食物的渴望。</li>
+                <li class="list-item-container"><span class="list-item-icon">🧘</span>**壓力管理：** 減少情緒性進食，促進正念飲食。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤝</span>**正向社交連結：** 為飲食改變提供支持和責任感。</li>
+                <li class="list-item-container"><span class="list-item-icon">🚭</span>**戒除成癮物質：** 改善味覺、營養吸收和代謝健康。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">監測與評估</h3>
+            <p class="text-gray-700 mb-4">有效的監測確保責任歸屬並允許及時調整：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">📝</span>**飲食評估工具：** 飲食日記、24小時回顧、食物頻率問卷。</li>
+                <li class="list-item-container"><span class="list-item-icon">📏</span>**人體測量：** 體重、BMI、腰圍、身體組成。</li>
+                <li class="list-item-container"><span class="list-item-icon">📊</span>**生理生化標記：** 血壓、空腹血糖、血脂、糖化血色素、炎症標記。</li>
+                <li class="list-item-container"><span class="list-item-icon">📈</span>**患者報告結果：** 能量水平、睡眠品質、情緒。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">未來方向與創新</h3>
+            <p class="text-gray-700 mb-4">營養科學快速發展，未來將朝向更精準和整合的方向發展：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🧬</span>**個人化營養：** 基於遺傳學、代謝組學和微生物組學的精準建議。</li>
+                <li class="list-item-container"><span class="list-item-icon">📱</span>**數位健康技術：** 行動應用程式、穿戴式設備、人工智慧平台提供即時回饋和遠端指導。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌍</span>**永續食物系統：** 強調植物性飲食、減少食物浪費、支持在地農業。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌿</span>**功能性食品與營養保健品：** 源自台灣傳統食材，提供靶向治療益處。</li>
+                <li class="list-item-container"><span class="list-item-icon">🏛️</span>**政策層面介入：** 健康食品補貼、含糖飲料稅、食品行銷法規。</li>
+                <li class="list-item-container"><span class="list-item-icon">☯️</span>**中醫整合：** 將中醫概念與現代營養科學整合。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">健康飲食是生活型態醫學不可或缺的支柱，在台灣預防和管理慢性病方面具有巨大潛力。國際指南和本土研究均支持以蔬菜、水果、全穀物、豆類、堅果、種子、魚和茶為主的飲食，並盡量減少加工肉類、超加工食品、含糖飲料和高脂肪零食。健康台式飲食法（TEA）展示了傳統飲食習慣如何與現代營養科學協調，從而顯著降低全因和心血管死亡率。文化敏感的介入措施，整合營養科學、傳統智慧和實用實施策略，可以賦予個人、家庭和社區採納更健康飲食的能力。臨床實踐、公共衛生政策和社區計畫的協調努力對於創造支持性食物環境和實現人口健康的持續改善至關重要。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚨</span>
+                    <p>台灣健康飲食迫在眉睫。超過一半的台灣成年人超重或肥胖，不健康飲食顯著導致慢性病盛行率上升。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>一般指南強調富含植物、低加工的飲食。國際和國家建議每日至少400克蔬果、全穀物、堅果、豆類，並限制飽和脂肪、反式脂肪、游離糖和鹽的攝入。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🇹🇼</span>
+                    <p>TEA模式融合傳統與科學。TEA強調植物性食物、豆製品、魚、茶和傳統烹飪方法，與台灣人群中顯著降低的全因和心血管死亡率相關。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🔬</span>
+                    <p>實證模式證實益處。地中海飲食和DASH飲食可降低死亡率、心血管事件和血壓，而以植物為主的飲食可降低中風風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🛡️</span>
+                    <p>特定食物提供劑量依賴性保護。全穀物、堅果和魚可降低心血管疾病和死亡率；發酵乳製品可能提供額外益處。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚫</span>
+                    <p>限制有害食物。含糖飲料、加工肉類和超加工食品會增加糖尿病、肥胖和死亡率的風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">☯️</span>
+                    <p>文化智慧是資產。傳統烹飪方法、季節性飲食和共食可被利用來支持健康飲食，同時保持文化認同。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🛠️</span>
+                    <p>實用策略至關重要。個人化評估、目標設定、動機式晤談、家庭和社區參與以及數位工具促進可持續的飲食改變。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🔄</span>
+                    <p>與其他生活型態因素整合可最大化益處。營養與身體活動、睡眠、壓力管理、社交連結和戒除高風險物質協同作用以促進健康。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：黃 Qi-Ya, 吳 Zheng-Yan, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter5" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第五章 身體活動</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">身體活動是預防和管理慢性病、促進健康老化和提升生活品質最有效且易於獲得的介入措施之一。本章將探討身體活動的生理基礎、全球與國家指南、評估與處方，以及台灣特有的考量與策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">身體活動的重要性與台灣現況</h3>
+            <p class="text-gray-700 mb-4">身體活動對心血管、代謝、肌肉骨骼、神經和免疫系統都有益處，並延伸至心理健康、認知功能和社會福祉。然而，台灣在推廣身體活動方面面臨獨特挑戰：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">D+</div>
+                    <div class="kpi-label">2022年台灣兒童青少年身體活動報告卡評級</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">#6</div>
+                    <div class="kpi-label">台灣在全球20個國家中，每日久坐時間超過六小時的人口排名</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">COVID-19疫情進一步加劇了久坐時間的增加和規律運動的減少。了解這些背景因素對於制定符合台灣文化、實用且可持續的介入措施至關重要。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">身體活動的生理基礎</h3>
+            <p class="text-gray-700 mb-4">身體活動是指任何由骨骼肌產生並導致能量消耗高於靜息水平的身體運動。它包括結構化運動、體育參與、職業活動、家務、交通相關活動和休閒活動。了解規律運動的生理機制對於制定有效介入措施和向患者及社區傳達積極運動的重要性至關關重要。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">❤️</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">心血管與代謝適應</h4>
+                    <p class="text-sm text-gray-600">強化心肌、改善心輸出效率、降低靜息心率和血壓、提升胰島素敏感性。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">💪</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">肌肉骨骼效益</h4>
+                    <p class="text-sm text-gray-600">增加骨密度、增強肌肉力量和耐力、改善柔韌性和平衡、降低跌倒和骨折風險。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🧠</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">神經與認知效益</h4>
+                    <p class="text-sm text-gray-600">增強大腦功能、改善記憶和執行功能、降低認知衰退和失智症風險。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🛡️</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">免疫效益</h4>
+                    <p class="text-sm text-gray-600">增強免疫功能、減少全身性炎症、提高對感染和慢性病的抵抗力。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">全球與國家身體活動指南</h3>
+            <p class="text-gray-700 mb-4">世界衛生組織 (WHO) 提供基於實證的各年齡層建議。台灣已將這些國際指南在地化，以適應當地需求和情況，同時保持與全球證據的一致性。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">成人 (18-64歲) 建議</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">⏱️</span>每週至少 150-300 分鐘中等強度有氧活動，或 75-150 分鐘高強度活動。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🏋️</span>每週兩天或以上進行主要肌肉群的肌力訓練。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">老年人 (≥65歲) 建議</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">⏱️</span>與成人建議量相似。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⚖️</span>強調增強平衡和預防跌倒的活動 (每週三天或以上)。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4 col-span-full">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">兒童青少年 (5-17歲) 建議</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">⏱️</span>每天至少 60 分鐘中等至高強度活動，大部分為有氧活動。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🦴</span>每週至少三天進行肌力和骨骼強化活動。</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">醫療提供者必須使用 FITT-VP 原則（頻率、強度、時間、類型、總量和進展）將一般指南適應於個體情況和目標。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">身體活動評估與處方</h3>
+            <p class="text-gray-700 mb-4">有效的介入始於對當前活動水平、體能狀況、健康狀況和個人偏好的全面評估。評估應涵蓋體能的多個組成部分，並作為個體化運動處方的基礎。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">評估工具</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">📝</span>**自我報告問卷：** 國際身體活動問卷 (IPAQ) 台灣版。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⌚</span>**客觀監測：** 加速計和其他穿戴式設備。</li>
+                        <li class="list-item-container"><span class="list-item-icon">👵</span>**老年人體能測試：** 針對老年人驗證，評估上下肢力量、心血管耐力、柔韌性和動態平衡。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">FITT-VP 運動處方框架</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🔢</span>**頻率 (Frequency)：** 活動進行的頻率。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⚡</span>**強度 (Intensity)：** 活動的強度 (心率區間、自覺用力程度、代謝當量)。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⏰</span>**時間 (Time)：** 每次活動的持續時間。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🚶‍♀️</span>**類型 (Type)：** 活動模式 (步行、騎自行車、游泳、阻力訓練)。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📏</span>**總量 (Volume)：** 頻率 × 強度 × 時間 的總體測量。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📈</span>**進展 (Progression)：** 逐步增加活動量以降低受傷風險並提高依從性。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣特有的身體活動考量</h3>
+            <p class="text-gray-700 mb-4">在台灣實施身體活動介入必須考慮獨特的文化、環境和社會因素：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">☀️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">氣候與環境</h4>
+                    <p class="text-sm text-gray-600 mt-2">亞熱帶氣候允許全年戶外活動，但高溫高濕需注意補水和運動時間。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏙️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">都市密度</h4>
+                    <p class="text-sm text-gray-600 mt-2">促進活躍交通，但也帶來空氣污染、交通安全和綠地有限的挑戰。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">☯️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">傳統團體活動</h4>
+                    <p class="text-sm text-gray-600 mt-2">太極拳、氣功和民俗舞蹈在老年人中流行，提供身心和文化益處。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">💼</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">工作文化</h4>
+                    <p class="text-sm text-gray-600 mt-2">長工時和高工作壓力導致久坐，需將短暫運動融入工作日。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">👨‍👩‍👧‍👦</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">家庭義務</h4>
+                    <p class="text-sm text-gray-600 mt-2">家庭義務和跨代同居可能限制正式運動時間，可透過家庭參與式介入支持集體運動。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🚲</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">YouBike系統</h4>
+                    <p class="text-sm text-gray-600 mt-2">台灣的YouBike公共自行車租賃系統是活躍交通的創新方式。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">解決久坐行為</h3>
+            <p class="text-gray-700 mb-4">久坐行為是慢性病和死亡的獨立風險因素。台灣的每日久坐時間在全球名列前茅，近三分之一的老年人久坐時間長，這與不良健康結果相關。即使達到身體活動建議量，這些風險仍然存在，凸顯了減少和中斷長時間久坐的必要性。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">久坐的健康風險</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">📈</span>增加慢性病和死亡風險。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📉</span>即使身體活躍也無法完全消除風險。</li>
+                        <li class="list-item-container"><span class="list-item-icon">👵</span>近三分之一的台灣老年人久坐時間長。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">減少久坐策略</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🪑</span>**環境改造：** 站立式辦公桌、步行會議。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🚶</span>**行為介入：** 限制螢幕時間、每30分鐘短暫活動休息。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📱</span>**科技支持：** 智慧型手機應用程式、穿戴式設備提醒。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">特殊人群與適應</h3>
+            <p class="text-gray-700 mb-4">身體活動介入必須根據特定人群的多元需求進行調整：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">👵</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">老年人</h4>
+                    <p class="text-sm text-gray-600 mt-2">多組分計畫（有氧、阻力、平衡、柔韌性），預防跌倒，維持功能獨立。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🧒</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">兒童和青少年</h4>
+                    <p class="text-sm text-gray-600 mt-2">學校體育、活躍的課間休息和課後計畫，以及家長參與。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🩺</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">慢性病患者</h4>
+                    <p class="text-sm text-gray-600 mt-2">針對心血管疾病、糖尿病、癌症倖存者和殘疾人士的專業計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🤰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">孕婦</h4>
+                    <p class="text-sm text-gray-600 mt-2">根據產科指南調整身體活動，支持母嬰健康。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">科技整合與創新</h3>
+            <p class="text-gray-700 mb-4">台灣的科技基礎設施為運動推廣提供了創新方法：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">⌚</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">穿戴式健身設備</h4>
+                    <p class="text-sm text-gray-600 mt-2">監測步數、距離、能量消耗、心率和睡眠，遊戲化功能增強動機。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📱</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">行動健康應用程式</h4>
+                    <p class="text-sm text-gray-600 mt-2">提供個人化運動計畫、影片示範和即時回饋。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🎮</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">虛擬與擴增實境</h4>
+                    <p class="text-sm text-gray-600 mt-2">創造沉浸式訓練和康復體驗。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon"> telehealth</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">遠距醫療與遠端監測</h4>
+                    <p class="text-sm text-gray-600 mt-2">醫療提供者無需親自就診即可支持運動計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🤖</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">人工智慧與機器學習</h4>
+                    <p class="text-sm text-gray-600 mt-2">分析活動數據以個人化建議、預測依從模式和優化介入策略。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">💬</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社交媒體與線上社區</h4>
+                    <p class="text-sm text-gray-600 mt-2">促進同儕支持、問責制和共享經驗。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">臨床實施與醫療整合</h3>
+            <p class="text-gray-700 mb-4">將身體活動成功整合到臨床實踐中，需要系統性方法，包括提供者培訓、工作流程整合、患者評估和諮詢，以及持續追蹤。「運動即良藥」(Exercise is Medicine) 等倡議在台灣已獲採納，推廣將身體活動作為生命徵象的常規評估，並將運動處方作為標準照護的一部分。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">🎓</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">提供者培訓</h4>
+                    <p class="text-sm text-gray-600 mt-2">醫療提供者需具備運動科學、評估方法、處方原則和行為改變技術知識。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🔄</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">工作流程整合</h4>
+                    <p class="text-sm text-gray-600 mt-2">電子健康記錄應納入活動水平和處方文件模板。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📝</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">標準化評估工具</h4>
+                    <p class="text-sm text-gray-600 mt-2">如身體活動生命徵象、IPAQ簡表。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🔗</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">轉介網絡</h4>
+                    <p class="text-sm text-gray-600 mt-2">將患者轉介至社區資源，如健身設施和運動計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🗓️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">規律追蹤</h4>
+                    <p class="text-sm text-gray-600 mt-2">定期回診評估進度、解決障礙並修改處方。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏛️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">政策與給付</h4>
+                    <p class="text-sm text-gray-600 mt-2">醫療政策和給付結構應支持身體活動推廣。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">社區基礎介入與政策</h3>
+            <p class="text-gray-700 mb-4">人口層面的方法透過創造有利於活躍生活的環境來補充個體介入。社區計畫、學校計畫和職場健康計畫提供運動機會，並解決久坐行為。對建成環境的改造（如改善步行道、自行車道）可促進活躍交通和休閒活動。台灣的YouBike公共自行車租賃系統是活躍交通的創新典範。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏘️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社區計畫</h4>
+                    <p class="text-sm text-gray-600 mt-2">團體運動課程、步行俱樂部、體育聯盟和娛樂活動。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">學校計畫</h4>
+                    <p class="text-sm text-gray-600 mt-2">優質體育教育、活躍的課間休息和課後計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏢</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">職場健康計畫</h4>
+                    <p class="text-sm text-gray-600 mt-2">現場設施、有組織的活動和支持活躍通勤的政策。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🌳</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">建成環境改造</h4>
+                    <p class="text-sm text-gray-600 mt-2">改善步行道、自行車道、公園和娛樂設施。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🚌</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">公共交通政策</h4>
+                    <p class="text-sm text-gray-600 mt-2">優先考慮步行、騎自行車和公共交通使用。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏛️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">醫療政策倡議</h4>
+                    <p class="text-sm text-gray-600 mt-2">透過給付機制、品質測量和提供者教育支持身體活動介入。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">監測與評估</h3>
+            <p class="text-gray-700 mb-4">全面的監測和評估對於評估身體活動介入的有效性至關重要：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">📈</span>**過程評估：** 衡量覆蓋範圍、劑量、忠實性和參與者滿意度。</li>
+                <li class="list-item-container"><span class="list-item-icon">📊</span>**結果測量：** 評估活動水平、體能參數、健康指標和生活品質的變化。</li>
+                <li class="list-item-container"><span class="list-item-icon">✅</span>**綜合測量：** 結合自我報告和客觀測量。</li>
+                <li class="list-item-container"><span class="list-item-icon">💰</span>**成本效益分析：** 比較介入成本與健康益處和醫療費用節省。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">未來方向與創新</h3>
+            <p class="text-gray-700 mb-4">身體活動推廣領域持續發展，未來將朝向更精準、數位化和整合的方向邁進：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🧬</span>**精準醫學：** 基於遺傳和代謝特徵的個人化運動處方。</li>
+                <li class="list-item-container"><span class="list-item-icon">💻</span>**數位療法：** 透過數位平台提供基於實證的、可擴展的個人化介入。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤖</span>**人工智慧與機器學習：** 個人化指導和優化介入策略。</li>
+                <li class="list-item-container"><span class="list-item-icon">🎮</span>**虛擬與擴增實境：** 創造沉浸式訓練和康復體驗。</li>
+                <li class="list-item-container"><span class="list-item-icon">⏱️</span>**微介入與即時適應性介入：** 提供基於即時需求評估的簡短、及時支持。</li>
+                <li class="list-item-container"><span class="list-item-icon">🔄</span>**整合其他LM組件：** 與營養、睡眠、壓力管理等協同作用。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌍</span>**人口健康方法：** 解決健康的社會決定因素，減少活動參與和結果的差異。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">身體活動是生活型態醫學的基礎支柱，在預防和管理慢性病、促進最佳健康和福祉方面具有巨大潛力。其益處廣泛且令人信服，涵蓋心血管、代謝、肌肉骨骼、神經和免疫健康以及心理福祉。台灣面臨久坐行為盛行、人口結構變化和快速城市化等獨特挑戰，同時也擁有先進的技術基礎設施和豐富的文化傳統等獨特機遇。整合個體層面介入、社區計畫和支持性政策的全面策略至關重要。醫療提供者必須常規評估活動、提供個人化處方並持續支持。技術可以增強但不能取代專業指導和社會支持。修改環境和政策的人口層面方法對於可持續的改變是必要的。隨著台灣應對人口老化和慢性病負擔增加的挑戰，基於實證的規律中等強度身體活動推廣將仍然是健康促進和疾病預防的核心。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💡</span>
+                    <p>規律身體活動對多個生理系統有廣泛益處，對預防和管理台灣常見慢性病至關重要。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>WHO建議（每週150-300分鐘中等強度有氧活動加肌力訓練）適用於台灣人群，應根據個人情況和文化偏好進行調整。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🪑</span>
+                    <p>久坐行為獨立有害；台灣是每日久坐時間最長的國家之一，需要有針對性的策略來減少和中斷長時間久坐。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🏥</span>
+                    <p>醫療提供者應將身體活動作為生命徵象進行評估，並使用FITT-VP框架提供個人化運動處方，考慮台灣特有的文化和環境因素。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🌐</span>
+                    <p>技術整合、社區計畫和支持性政策對於全面推廣活躍生活至關重要，以解決個人、社會和環境決定因素。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：許 Xuan, 朱 Li-Ping, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter6" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第六章 修復性睡眠</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討修復性睡眠的重要性及其對健康的影響，並解析台灣普遍存在的睡眠問題與生活型態醫學的應對策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">睡眠的生理與功能</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>由生理時鐘和睡眠穩態驅動，循環經歷非快速眼動（NREM）和快速眼動（REM）階段。</li>
+                <li>深度NREM睡眠支持組織修復、免疫監測和代謝穩態。</li>
+                <li>REM睡眠與記憶鞏固、情緒處理和突觸可塑性相關。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">台灣睡眠障礙的流行病學與決定因素</h3>
+            <p class="text-gray-600 mb-4">台灣睡眠問題普遍，近半數成人睡眠品質不佳，約四分之一有失眠困擾，且有大量安眠藥使用者。</p>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">台灣成年人失眠盛行率</h4>
+                <div class="text-center py-10">
+                    <div class="text-7xl font-black text-[#FF6B6B]">25%</div>
+                    <div class="mt-4 text-xl font-bold text-[#073B4C]">台灣成年人有失眠困擾</div>
+                    <p class="text-gray-500">全國性調查數據</p>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-4">導致睡眠不佳的因素包括輪班工作、高壓工作與學業、通勤時間長、照護責任、環境噪音和光污染，以及不健康的生活習慣。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">生活型態醫學的睡眠修復策略</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**睡眠衛生：** 保持規律作息、規律運動、睡前避免咖啡因、尼古丁、酒精和螢幕，營造涼爽、黑暗、安靜的臥室。</li>
+                <li>**身體活動：** 規律運動能透過生理時鐘調整、溫度調節和壓力減輕來改善睡眠。</li>
+                <li>**失眠認知行為療法 (CBT-I)：** 慢性失眠的一線非藥物療法，結合睡眠限制、刺激控制、認知重構等。</li>
+                <li>**「5C」框架：** 簡化睡眠促進行為，包括：**Consistent** schedule (規律作息), **Comfortable** environment (舒適環境), **Correct** sleep hygiene (正確睡眠衛生), **Continuous** physical activity (持續身體活動), **Calm** the mind (平靜心靈)。</li>
+            </ul>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：陳 Yen-Chin, 鄭 Shu-Fan, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter7" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第七章 壓力管理</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討壓力對身心健康的影響，並提供經實證的生活型態策略，以有效管理壓力，尤其是在台灣特有的文化背景下。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">壓力與生理學基礎</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>壓力反應由下視丘-垂體-腎上腺 (HPA) 軸和交感神經系統協調。</li>
+                <li>慢性壓力導致皮質醇和兒茶酚胺持續升高，引發胰島素阻抗、內臟脂肪堆積、高血壓和血脂異常。</li>
+                <li>長期壓力會損害免疫功能，增加感染和慢性病的易感性。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">壓力相關的健康結果</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**心血管與代謝疾病：** 增加冠心病、第二型糖尿病風險。</li>
+                <li>**免疫功能失調：** 增加病毒感染易感性、延緩傷口癒合。</li>
+                <li>**心理健康：** 導致焦慮、憂鬱和睡眠障礙。</li>
+                <li>**社交孤立：** 加劇壓力相關健康風險，強健的社交關係能顯著提高存活率。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">經實證的生活型態壓力管理策略</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**營養：** 攝取全穀物、蔬果、豆類、堅果和魚類，減少加工食品。</li>
+                <li>**身體活動：** 規律運動，特別是太極拳、氣功等身心活動，能顯著降低壓力。</li>
+                <li>**修復性睡眠：** 確保充足睡眠（每晚至少7小時），改善睡眠衛生。</li>
+                <li>**社交連結與社區參與：** 培養支持性關係，參與團體活動。</li>
+                <li>**戒除成癮物質：** 避免尼古丁、酒精和檳榔，這些會加劇壓力生理反應。</li>
+                <li>**親近大自然：** 每天20-30分鐘的自然體驗能顯著降低皮質醇和澱粉酶。</li>
+                <li>**正念與認知介入：** 正念減壓（MBSR）能有效降低壓力、焦慮和憂鬱。</li>
+                <li>**呼吸與放鬆技巧：** 緩慢深呼吸、漸進式肌肉放鬆能啟動副交感神經系統。</li>
+            </ul>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：何 Shih-Chun, 柯 Ya-Ting, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter8" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第八章 戒除成癮物質</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章強調戒除高風險物質作為生活型態醫學的核心支柱，並針對台灣特有的檳榔嚼食、菸草、酒精、新型精神活性物質（NPS）和甲基安非他命使用模式提供指導。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">檳榔嚼食</h3>
+            <p class="text-gray-600 mb-4">檳榔嚼食在台灣部分地區普遍，與口腔癌和全身性疾病（如慢性腎病、肝病）有強烈關聯。</p>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">嚼食檳榔與口腔癌風險</h4>
+                <div class="text-center py-10">
+                    <div class="text-7xl font-black text-[#FF6B6B]">7.9x</div>
+                    <div class="mt-4 text-xl font-bold text-[#073B4C]">口腔癌相對風險</div>
+                    <p class="text-gray-500">習慣性嚼食檳榔者 vs. 非嚼食者</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">菸草吸食</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>菸草仍是台灣可預防死亡的主要原因。青少年時期開始吸菸並持續至成年者，預期壽命平均減少10年。</li>
+                <li>戒菸能顯著降低風險：40歲前戒菸可減少約90%的吸菸相關死亡率。</li>
+                <li>**實證戒菸療法：** 尼古丁替代療法、安非他酮和伐尼克林能顯著提高戒菸率。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">酒精</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>累積證據顯示，沒有任何程度的酒精攝取是安全的。酒精導致全球5.3%的死亡。</li>
+                <li>東亞人群中，乙醛脫氫酶2 (ALDH2) 缺乏症盛行率高，即使少量飲酒也會顯著提高食道癌和頭頸癌風險。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">新型精神活性物質 (NPS) 與甲基安非他命</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**NPS：** 成分和效力差異大，毒性不可預測，可能導致心律不整、心肌梗塞、精神病等嚴重不良反應。</li>
+                <li>**甲基安非他命：** 長期使用導致神經毒性、心血管併發症、精神症狀和認知缺陷。目前沒有FDA批准的藥物治療，主要依賴行為療法。</li>
+            </ul>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：黃 Bo-Yu, 張 Zhi-Cheng, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter9" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第九章 正向社交連結</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討正向社交連結作為生活型態醫學的重要支柱，以及其與死亡率降低、身心健康改善的關聯，並分析台灣孤獨感和社交孤立的現況與介入策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">定義與生理基礎</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**社交連結：** 個人融入支持性人際網絡的程度。</li>
+                <li>**孤獨感：** 主觀上感到社交連結不足。</li>
+                <li>**社交孤立：** 客觀上缺乏社交接觸。</li>
+                <li>正向關係可降低下視丘-垂體-腎上腺軸和交感神經系統的活性，減少皮質醇和兒茶酚胺水平，並調節免疫功能。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">台灣社交連結的流行病學</h3>
+            <p class="text-gray-600 mb-4">台灣社會正經歷快速的人口結構變化，單人家庭增加，社交參與度下降。超過五分之一的台灣成年人表示感到孤獨，約五分之一的老年人獨居。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">社交連結對健康的影響</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**死亡率與心臟代謝健康：** 社交關係越強，存活機率高出50%，效果媲美戒菸。孤獨感與第二型糖尿病風險增加兩倍相關。</li>
+                <li>**心理健康：** 孤獨感與新發憂鬱症風險增加兩倍以上相關，也與認知能力下降和失智症有關。</li>
+                <li>**癌症存活率：** 社交支持可顯著提高癌症患者的存活率。</li>
+            </ul>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">強健社交關係與存活機率</h4>
+                <p class="text-gray-600 text-center mb-4">強健的社交關係能顯著提高存活機率。</p>
+                <div class="chart-container">
+                    <canvas id="socialConnectionChart"></canvas>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">實證介入措施</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**連結處方 (FITT 框架)：** 頻率、強度、類型和時間，鼓勵患者投入有意義的關係和社區參與。</li>
+                <li>**心理與社會介入：** 團體認知行為療法 (CBT)、動機式晤談 (MI) 和社會處方。</li>
+                <li>**支持社交連結的生活型態介入：** 團體運動、充足睡眠、壓力管理和共同用餐。</li>
+            </ul>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：劉 Ting-Hui, 鄭 Wan-Lin, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter10" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第十章 久坐行為</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討久坐行為作為一種獨立的健康風險因素，其在台灣的流行現況、健康影響以及生活型態醫學中的應對策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">理解久坐行為</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**定義：** 任何清醒時能量消耗 ≤1.5 代謝當量 (METs)，以坐、斜倚或躺姿進行的行為。</li>
+                <li>**生理影響：** 導致骨骼肌葡萄糖攝取、脂質代謝和血管剪切應力急劇下降，影響葡萄糖穩態和胰島素阻抗。</li>
+                <li>**與身體活動的互動：** 久坐與身體活動是獨立的風險因素，高強度身體活動無法完全消除久坐帶來的死亡風險。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">台灣久坐行為的流行病學</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**各年齡層盛行率：** 台灣成年人普遍存在久坐行為，超過三分之一的中老年人每天久坐超過6小時。青少年螢幕使用時間也持續增加。</li>
+                <li>**職業久坐：** 職業性久坐是總久坐時間的主要貢獻者，與全因死亡率和心血管疾病死亡率顯著相關。</li>
+            </ul>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">職業性久坐與死亡率風險</h4>
+                <div class="text-center py-10">
+                    <div class="text-7xl font-black text-[#FF6B6B]">16%↑</div>
+                    <div class="mt-4 text-xl font-bold text-[#073B4C]">全因死亡率增加</div>
+                    <p class="text-gray-500">主要久坐工作者 vs. 非久坐工作者</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">久坐的健康後果</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**心臟代謝結果：** 增加心血管疾病、第二型糖尿病和代謝症候群風險。</li>
+                <li>**肌肉骨骼與癌症：** 導致下背痛、頸部疼痛，並與結直腸癌、子宮內膜癌和肺癌風險增加有關。</li>
+                <li>**心理健康與睡眠：** 與焦慮、憂鬱和睡眠障礙相關。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">減少久坐的實證介入措施</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**個人層面策略：** 提高意識、設定目標、每20-30分鐘進行短暫活動休息。</li>
+                <li>**環境與職場介入：** 站立式辦公桌、跑步機辦公桌、組織政策鼓勵活動。</li>
+                <li>**技術介入：** 智慧型手機應用程式、穿戴式設備、電腦軟體提醒。</li>
+                <li>**社區與政策方法：** 城市規劃支持活躍交通、公共宣傳活動。</li>
+            </ul>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：唐 Xin-Ru, 陳 Yi-Ru, 廖 Chia-Te</div>
+        </div>
+
+        <div id="chapter11" class="tab-content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第十一章 輪班工作對健康的影響與應對策略</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">本章探討輪班工作對健康的影響，特別是其如何擾亂人體生理時鐘，導致多種慢性疾病風險增加，並提供個人、雇主和政策層面的應對策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">生理時鐘紊亂</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>夜間工作和不規律的輪班時間會導致外部需求與內部生理時鐘不同步。</li>
+                <li>這種紊亂會抑制夜間褪黑激素分泌、影響皮質醇節律，並導致時鐘基因表達失同步。</li>
+                <li>這些變化會損害胰島素敏感性、改變脂質代謝並引發氧化壓力，增加慢性病和癌症的易感性。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">輪班工作的健康後果</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**代謝紊亂與糖尿病：** 輪班工作者的代謝症候群風險增加兩倍以上。</li>
+                <li>**心血管疾病：** 心肌梗塞和冠狀動脈事件風險顯著升高。</li>
+                <li>**胃腸道疾病：** 輪班工作者患腸躁症的盛行率高出81%。</li>
+                <li>**癌症：** 夜班工作被國際癌症研究機構列為「可能的人類致癌物」。</li>
+                <li>**心理健康與睡眠：** 輪班工作增加不良心理健康結果的風險，包括憂鬱和焦慮。</li>
+            </ul>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">輪班工作與代謝症候群風險</h4>
+                <div class="chart-container">
+                    <canvas id="shiftWorkChart"></canvas>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">輪班工作者的應對策略</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**睡眠與生理時鐘管理：** 保護白天睡眠（遮光窗簾、眼罩、耳塞）、策略性光照、褪黑激素。</li>
+                <li>**營養與運動：** 規律用餐、避免高油脂食物、適度運動。</li>
+                <li>**壓力管理與社交支持：** 正念、深呼吸、太極拳、氣功、尋求社交支持。</li>
+                <li>**健康監測：** 定期健康檢查、監測睡眠模式和心理健康症狀。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-4">雇主與政策建議</h3>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li>**排班實踐：** 採用順向輪班、限制連續夜班、提供充足恢復時間。</li>
+                <li>**工作場所設施：** 提供安靜休息區、夜班明亮照明、健康餐飲選擇。</li>
+                <li>**勞動保護：** 限制加班、強制休息時間、提供交通協助。</li>
+            </ul>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：李 Ying-Li, 楊 Yi-Ning, 廖 Chia-Te</div>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>資料來源：「台灣生活型態醫學共識報告」</p>
+            <p class="text-sm text-gray-400 mt-2">此互動式應用程式僅供學術與說明之用。</p>
+        </div>
+    </footer>
+
+    <script>
+        let charts = {};
+
+        const palette = {
+            red: '#FF6B6B',
+            yellow: '#FFD166',
+            green: '#06D6A0',
+            blue: '#118AB2',
+            darkBlue: '#073B4C',
+            background: '#f0f4f8',
+            text: '#334155'
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: palette.text,
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { display: false }
+                }
+            }
+        };
+
+        function wrapLabels(label, maxLength) {
+            if (label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function createCharts() {
+            const lifeExpectancyCtx = document.getElementById('lifeExpectancyChart');
+            if (lifeExpectancyCtx) {
+                if (charts.lifeExpectancyChart) charts.lifeExpectancyChart.destroy();
+                charts.lifeExpectancyChart = new Chart(lifeExpectancyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [''],
+                        datasets: [{
+                            label: '增加的年數',
+                            data: [7.13],
+                            backgroundColor: [palette.green],
+                            borderRadius: 4,
+                            barPercentage: 0.5
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '+7.13 年', color: palette.darkBlue, font: { size: 24, weight: '900' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const healthcareCostCtx = document.getElementById('healthcareCostChart');
+            if (healthcareCostCtx) {
+                if (charts.healthcareCostChart) charts.healthcareCostChart.destroy();
+                charts.healthcareCostChart = new Chart(healthcareCostCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [''],
+                        datasets: [{
+                            label: '減少的百分比',
+                            data: [28.12],
+                            backgroundColor: [palette.yellow],
+                            borderRadius: 4,
+                            barPercentage: 0.5
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '-28.12 %', color: palette.darkBlue, font: { size: 24, weight: '900' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const multiChronicConditionChartCtx = document.getElementById('multiChronicConditionChart');
+            if (multiChronicConditionChartCtx) {
+                if (charts.multiChronicConditionChart) charts.multiChronicConditionChart.destroy();
+                charts.multiChronicConditionChart = new Chart(multiChronicConditionChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['2000年', '2010年', '65歲以上'],
+                        datasets: [{
+                            label: '多重慢性病盛行率 (%)',
+                            data: [9.6, 17.1, 64.5],
+                            backgroundColor: [palette.blue, palette.blue, palette.darkBlue],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 70,
+                                title: { display: true, text: '盛行率 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const lifestyleMortalityRiskCtx = document.getElementById('lifestyleMortalityRiskChart');
+            if (lifestyleMortalityRiskCtx) {
+                if (charts.lifestyleMortalityRiskChart) charts.lifestyleMortalityRiskChart.destroy();
+                charts.lifestyleMortalityRiskChart = new Chart(lifestyleMortalityRiskCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            wrapLabels('吸菸者全因死亡率', 10),
+                            wrapLabels('低蔬果攝取心血管死亡率', 10),
+                            wrapLabels('低身體活動心血管死亡率', 10)
+                        ],
+                        datasets: [{
+                            label: '風險增加 (%)',
+                            data: [33, 43, 100], // "more than doubled" approximated to 100% increase
+                            backgroundColor: [palette.red, palette.red, palette.red],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                title: { display: true, text: '風險增加 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const fitbitMVPAChartCtx = document.getElementById('fitbitMVPAChart');
+            if (fitbitMVPAChartCtx) {
+                if (charts.fitbitMVPAChart) charts.fitbitMVPAChart.destroy();
+                charts.fitbitMVPAChart = new Chart(fitbitMVPAChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [wrapLabels('MVPA增加 (分鐘/週)', 10), wrapLabels('步數增加 (步)', 10)],
+                        datasets: [{
+                            label: '平均增加量',
+                            data: [62, 789],
+                            backgroundColor: [palette.green, palette.blue],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                title: { display: true, text: '增加量' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const smartphoneHbA1cChartCtx = document.getElementById('smartphoneHbA1cChart');
+            if (smartphoneHbA1cChartCtx) {
+                if (charts.smartphoneHbA1cChart) charts.smartphoneHbA1cChart.destroy();
+                charts.smartphoneHbA1cChart = new Chart(smartphoneHbA1cChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['顯著改善試驗數', '無顯著改善試驗數'],
+                        datasets: [{
+                            data: [5, 3],
+                            backgroundColor: [palette.green, '#e9ecef'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: { ...defaultChartOptions, cutout: '70%',
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: true, position: 'bottom' },
+                            title: { display: true, text: 'HbA1c顯著改善試驗 (5/8)', color: palette.darkBlue, font: { size: 16, weight: 'bold' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            // Charts from Chapter 4
+            const mediterraneanDietMortalityChartCtx = document.getElementById('mediterraneanDietMortalityChart');
+            if (mediterraneanDietMortalityChartCtx) {
+                if (charts.mediterraneanDietMortalityChart) charts.mediterraneanDietMortalityChart.destroy();
+                charts.mediterraneanDietMortalityChart = new Chart(mediterraneanDietMortalityChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['全因死亡率降低 (%)', '心血管死亡率顯著降低'],
+                        datasets: [{
+                            label: '降低百分比',
+                            data: [38.5, 100], // Average of 21-56% is 38.5%. 100% for "significant reduction"
+                            backgroundColor: [palette.green, palette.blue],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 100,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const dashDietBloodPressureChartCtx = document.getElementById('dashDietBloodPressureChart');
+            if (dashDietBloodPressureChartCtx) {
+                if (charts.dashDietBloodPressureChart) charts.dashDietBloodPressureChart.destroy();
+                charts.dashDietBloodPressureChart = new Chart(dashDietBloodPressureChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['收縮壓降低 (mmHg)', '舒張壓降低 (mmHg)'],
+                        datasets: [{
+                            label: '降低值',
+                            data: [6.7, 3.5],
+                            backgroundColor: [palette.yellow, palette.orange],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                title: { display: true, text: '降低值 (mmHg)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const teaMortalityCtx = document.getElementById('teaMortalityChart');
+            if (teaMortalityCtx) {
+                if (charts.teaMortalityChart) charts.teaMortalityChart.destroy();
+                charts.teaMortalityChart = new Chart(teaMortalityCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['全因死亡風險降低', '剩餘風險'],
+                        datasets: [{
+                            data: [36, 64],
+                            backgroundColor: [palette.green, '#e9ecef'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: { ...defaultChartOptions, cutout: '70%',
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '↓ 36% 全因死亡風險', color: palette.darkBlue, font: { size: 16, weight: 'bold' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const teaCardiovascularMortalityChartCtx = document.getElementById('teaCardiovascularMortalityChart');
+            if (teaCardiovascularMortalityChartCtx) {
+                if (charts.teaCardiovascularMortalityChart) charts.teaCardiovascularMortalityChart.destroy();
+                charts.teaCardiovascularMortalityChart = new Chart(teaCardiovascularMortalityChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['心血管死亡風險降低', '剩餘風險'],
+                        datasets: [{
+                            data: [48, 52],
+                            backgroundColor: [palette.blue, '#e9ecef'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: { ...defaultChartOptions, cutout: '70%',
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '↓ 48% 心血管死亡風險', color: palette.darkBlue, font: { size: 16, weight: 'bold' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const fishConsumptionChartCtx = document.getElementById('fishConsumptionChart');
+            if (fishConsumptionChartCtx) {
+                if (charts.fishConsumptionChart) charts.fishConsumptionChart.destroy();
+                charts.fishConsumptionChart = new Chart(fishConsumptionChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['每增加20克/天魚類攝取'],
+                        datasets: [{
+                            label: '心血管死亡率降低 (%)',
+                            data: [4],
+                            backgroundColor: [palette.green],
+                            borderRadius: 4,
+                            barPercentage: 0.5
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 10,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const wholeGrainChartCtx = document.getElementById('wholeGrainChart');
+            if (wholeGrainChartCtx) {
+                if (charts.wholeGrainChart) charts.wholeGrainChart.destroy();
+                charts.wholeGrainChart = new Chart(wholeGrainChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['高全穀物攝取', '每增加90克/天'],
+                        datasets: [{
+                            label: '心血管疾病風險降低 (%)',
+                            data: [16, 22],
+                            backgroundColor: [palette.blue, palette.darkBlue],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 25,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const nutConsumptionChartCtx = document.getElementById('nutConsumptionChart');
+            if (nutConsumptionChartCtx) {
+                if (charts.nutConsumptionChart) charts.nutConsumptionChart.destroy();
+                charts.nutConsumptionChart = new Chart(nutConsumptionChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [wrapLabels('冠心病風險降低', 10), wrapLabels('心血管疾病風險降低', 10), wrapLabels('全因死亡率降低', 10)],
+                        datasets: [{
+                            label: '降低百分比 (%)',
+                            data: [29, 21, 22],
+                            backgroundColor: [palette.yellow, palette.orange, palette.red],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 35,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const socialConnectionCtx = document.getElementById('socialConnectionChart');
+            if (socialConnectionCtx) {
+                if (charts.socialConnectionChart) charts.socialConnectionChart.destroy();
+                charts.socialConnectionChart = new Chart(socialConnectionCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['存活機率提升', '基準'],
+                        datasets: [{
+                            data: [50, 50],
+                            backgroundColor: [palette.blue, '#e9ecef'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: { ...defaultChartOptions, cutout: '70%',
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '↑ 50% 存活機率', color: palette.darkBlue, font: { size: 16, weight: 'bold' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const shiftWorkCtx = document.getElementById('shiftWorkChart');
+            if (shiftWorkCtx) {
+                if (charts.shiftWorkChart) charts.shiftWorkChart.destroy();
+                charts.shiftWorkChart = new Chart(shiftWorkCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['日班工作者', '輪班工作者'],
+                        datasets: [{
+                            label: '代謝症候群風險 (倍數)',
+                            data: [1, 2.17],
+                            backgroundColor: [palette.blue, palette.red],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: { y: { ...defaultChartOptions.scales.y, beginAtZero: true, title: { display: true, text: '相對風險' } } }
+                    }
+                });
+            }
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+
+            // Re-create charts when tab is shown to ensure they render correctly
+            createCharts();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    showTab(button.dataset.tab);
+                });
+            });
+
+            // Show the first tab by default and create its charts
+            showTab('chapter1');
+        });
+    </script>
+</body>
+</html>
