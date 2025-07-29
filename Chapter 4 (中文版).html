@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <title>台灣生活型態醫學共識報告 - 第四章 健康飲食</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            text-align: center;
+            border-bottom: 8px solid #118AB2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #073B4C;
+            line-height: 1;
+        }
+        .kpi-label {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            color: #118AB2;
+            line-height: 1.6;
+        }
+        .data-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            color: #118AB2;
+            margin-bottom: 0.5rem;
+        }
+        .list-item-icon {
+            font-size: 1.25rem;
+            color: #06D6A0;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .list-item-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .take-home-message-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .take-home-icon {
+            font-size: 1.5rem;
+            color: #118AB2;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+        .strategy-card {
+            background-color: #e0f2f7;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+        }
+        .strategy-card:hover {
+            background-color: #ceeef8;
+        }
+        .strategy-icon {
+            font-size: 3.5rem;
+            color: #073B4C;
+            margin-bottom: 0.75rem;
+        }
+        .challenge-card {
+            background-color: #ffebeb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #FF6B6B;
+        }
+        .challenge-icon {
+            font-size: 3rem;
+            color: #FF6B6B;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-[#073B4C] text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">台灣生活型態醫學共識報告</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light text-gray-300">一個為全人健康打造的文化適應新典範</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="chapter4_content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第四章 健康飲食</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">健康飲食是生活型態醫學的基石，因為飲食模式深刻影響代謝健康、身體組成、免疫功能和慢性病風險。本章將探討台灣飲食相關的挑戰與「健康台式飲食法」(TEA) 的實證。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣飲食相關的健康挑戰</h3>
+            <p class="text-gray-700 mb-4">台灣面臨日益嚴峻的飲食相關非傳染性疾病疫情。超過一半的台灣成年人超重或肥胖，兒童中也有約三分之一的男孩和四分之一的女孩超重或肥胖。糖尿病也是導致發病率和死亡率的主要原因，並大幅增加醫療支出。因此，解決不良飲食習慣是台灣公共衛生的優先事項，也是生活型態醫學的重要支柱。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">~50%↑</div>
+                    <div class="kpi-label">台灣成年人超重或肥胖比例</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">~33%</div>
+                    <div class="kpi-label">台灣兒童超重或肥胖比例 (男孩)</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">台灣的傳統飲食歷史上以豐富的蔬菜、豆製品、海鮮和茶為主。然而，快速的社會經濟發展和全球化改變了這些模式，增加了精緻穀物、加工食品、含糖飲料和西式快餐的消費。這些飲食轉變與肥胖、糖尿病和心血管疾病的上升趨勢同時發生。生活型態醫學旨在保留傳統飲食的健康方面，同時整合現代營養科學以支持人口健康。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">健康飲食在生活型態醫學中的基礎</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學中的健康飲食強調飲食模式而非單一營養素。全球組織如世界衛生組織建議每日攝取至少400克蔬果，限制總脂肪、游離糖和鹽的攝入。台灣衛福部也將這些原則編入《每日飲食指南》，將食物分為六大類並建議最低每日份量。更好地遵循《每日飲食指南》與骨質疏鬆症風險降低39%相關。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">WHO 飲食建議 (每日)</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🍎</span>至少 400 克水果和蔬菜</li>
+                        <li class="list-item-container"><span class="list-item-icon">🧈</span>總脂肪 < 30% 能量 (飽和脂肪 < 10%, 反式脂肪 < 1%)</li>
+                        <li class="list-item-container"><span class="list-item-icon">🍬</span>游離糖 < 10% 能量 (理想 < 5%)</li>
+                        <li class="list-item-container"><span class="list-item-icon">🧂</span>鹽攝入量 < 5 克</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">台灣衛福部《每日飲食指南》六大類</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🍚</span>全穀雜糧</li>
+                        <li class="list-item-container"><span class="list-item-icon">🥚</span>豆魚蛋肉</li>
+                        <li class="list-item-container"><span class="list-item-icon">🥛</span>乳品</li>
+                        <li class="list-item-container"><span class="list-item-icon">🥦</span>蔬菜</li>
+                        <li class="list-item-container"><span class="list-item-icon">🍓</span>水果</li>
+                        <li class="list-item-container"><span class="list-item-icon">🌰</span>油脂與堅果種子</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">飲食模式與疾病風險降低</h3>
+            <p class="text-gray-700 mb-4">經實證的飲食模式通常具有共同特徵：豐富的植物性食物、適量魚類和瘦肉蛋白、偏好不飽和脂肪，以及極少攝取超加工食品、添加糖和過多鹽。地中海飲食和DASH飲食是典範。植物性飲食也帶來顯著益處，例如台灣的一項世代研究報告，素食者缺血性中風和總中風的風險顯著降低。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">地中海飲食與全因死亡率降低</h4>
+                    <div class="chart-container">
+                        <canvas id="mediterraneanDietMortalityChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">高度遵循地中海飲食與全因死亡率降低21-56%相關，心血管死亡率顯著降低。</p>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">DASH飲食對血壓的影響</h4>
+                    <div class="chart-container">
+                        <canvas id="dashDietBloodPressureChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">DASH飲食可使收縮壓降低約6.7 mmHg，舒張壓降低3.5 mmHg (結合運動和體重管理可降低約16 mmHg)。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">這些益處的生理機制包括改善胰島素敏感性、血脂和血壓，減少全身性炎症和氧化壓力，支持腸道微生物多樣性，以及有利地調節飽足感激素。生活型態醫學強調這些模式的靈活、文化適應性應用，以促進可持續的行為改變。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">健康台式飲食法 (TEA)</h3>
+            <p class="text-gray-700 mb-4">「健康台式飲食法」(TEA) 整合了台灣傳統飲食習慣與現代營養科學。它強調多攝取植物性食物（蔬菜、水果、全穀物、堅果、種子和茶）和水產食物（魚類和海鮮），同時不鼓勵大理石紋或高度加工肉類、油炸和高脂肪食物、含糖零食和含糖飲料。TEA模式與顯著較低的死亡率相關。</p>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">TEA 模式與全因死亡風險降低</h4>
+                <p class="text-gray-600 text-sm mt-4">遵循最健康的TEA模式，全因死亡風險顯著降低。</p>
+                <div class="chart-container">
+                    <canvas id="teaMortalityChart"></canvas>
+                </div>
+            </div>
+            <div class="data-card mb-6">
+                <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">TEA 模式與心血管死亡風險降低</h4>
+                <p class="text-gray-600 text-sm mt-4">遵循最健康的TEA模式，心血管死亡風險顯著降低。</p>
+                <div class="chart-container">
+                    <canvas id="teaCardiovascularMortalityChart"></canvas>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">TEA 核心組成要素與實證效益</h3>
+            <p class="text-gray-700 mb-4">TEA模式鼓勵攝取以下核心食物類別，每種都具有獨特的健康益處：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🥦</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">植物性食物</h4>
+                    <p class="text-sm text-gray-600">蔬菜、水果、豆類提供膳食纖維、維生素、礦物質和植物化學物質。鼓勵每日至少五份蔬果。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🥛</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">黃豆製品</h4>
+                    <p class="text-sm text-gray-600">豆腐、豆豉、豆漿等提供優質蛋白質和異黃酮，可能改善血脂和降低癌症風險。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🐟</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">水產食物</h4>
+                    <p class="text-sm text-gray-600">魚類和海鮮富含Omega-3脂肪酸和優質蛋白質。每日增加20克魚類攝取，心血管死亡率降低4%。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🍵</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">茶</h4>
+                    <p class="text-sm text-gray-600">綠茶、烏龍茶、普洱茶富含多酚，具抗氧化和抗炎作用，可能降低血壓。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🌾</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">全穀物、堅果和種子</h4>
+                    <p class="text-sm text-gray-600">提供纖維和微量營養素。高全穀物攝取與心血管疾病風險降低16%相關。</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">魚類攝取與心血管死亡率降低</h4>
+                    <div class="chart-container">
+                        <canvas id="fishConsumptionChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">每增加20克/天的魚類攝取，心血管死亡率降低4%。</p>
+                </div>
+                <div class="data-card">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">全穀物攝取與心血管疾病風險降低</h4>
+                    <div class="chart-container">
+                        <canvas id="wholeGrainChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">高全穀物攝取與心血管疾病風險降低16%，每增加90克/天可降低22%。</p>
+                </div>
+                <div class="data-card md:col-span-2">
+                    <h4 class="font-bold text-lg text-[#073B4C] text-center mb-4">堅果攝取與心臟病及死亡率降低</h4>
+                    <div class="chart-container">
+                        <canvas id="nutConsumptionChart"></canvas>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">每日額外攝取28克堅果，冠心病風險降低29%，心血管疾病風險降低21%，全因死亡率降低22%。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">實施策略與文化整合</h3>
+            <p class="text-gray-700 mb-4">臨床醫生應評估患者的飲食習慣、文化偏好和烹飪技能，並強調TEA的文化相關性。實用指導包括食譜修改、膳食計畫模板、份量控制和購物技巧。家庭參與至關重要，社區倡議（如學校、職場和當地餐館推廣TEA選項）可增加可及性和社會支持。數位工具和飲食追蹤應用程式可強化行為改變。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">👩‍🍳</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">實用指導</h4>
+                    <p class="text-sm text-gray-600 mt-2">食譜修改、膳食計畫、份量控制、購物技巧。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">👨‍👩‍👧‍👦</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">家庭參與</h4>
+                    <p class="text-sm text-gray-600 mt-2">鼓勵家庭成員共同參與飲食諮詢，促進家庭一致性改變。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社區倡議</h4>
+                    <p class="text-sm text-gray-600 mt-2">在學校、職場和餐館推廣TEA兼容選項，增加可及性。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📱</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">數位工具</h4>
+                    <p class="text-sm text-gray-600 mt-2">利用飲食追蹤應用程式等數位工具強化行為改變。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏮</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">文化智慧整合</h4>
+                    <p class="text-sm text-gray-600 mt-2">結合中醫概念、季節性飲食、共食和藥膳，創造具文化共鳴的健康訊息。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">營養科學基礎</h3>
+            <p class="text-gray-700 mb-4">最佳飲食強調巨量營養素的平衡和品質。全穀物、蔬菜、水果和豆類提供複雜碳水化合物和膳食纖維。海鮮、豆製品和適量禽蛋提供優質蛋白質。魚類、堅果、種子和植物油提供健康脂肪。這些成分協同作用，降低慢性病風險。</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🍚</span>**巨量營養素與碳水化合物品質：** 強調全穀物、蔬果和豆類，改善血糖控制，降低膽固醇。</li>
+                <li class="list-item-container"><span class="list-item-icon">🍖</span>**蛋白質與脂肪來源：** 優先選擇海鮮、豆製品等植物性蛋白質，限制飽和脂肪和反式脂肪。</li>
+                <li class="list-item-container"><span class="list-item-icon">🍊</span>**微量營養素、植物化學物質與纖維：** 確保足夠的維生素、礦物質、抗氧化劑和膳食纖維攝取。</li>
+                <li class="list-item-container"><span class="list-item-icon">📚</span>**實證飲食模式：** 地中海飲食、DASH飲食和植物性飲食均證實能降低心血管事件、高血壓和死亡率。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">解決常見障礙與挑戰</h3>
+            <p class="text-gray-700 mb-4">患者在採納健康飲食時常遇到挑戰，需要針對性策略：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="challenge-card">
+                    <div class="challenge-icon">⏰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">時間限制</h4>
+                    <p class="text-sm text-gray-600 mt-2">透過批量烹飪、餐點準備和簡單食譜來解決。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">💸</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">成本考量</h4>
+                    <p class="text-sm text-gray-600 mt-2">強調經濟實惠的主食（如米飯、時令蔬菜、豆腐）和長期醫療費用節省。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🔪</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">烹飪技能有限</h4>
+                    <p class="text-sm text-gray-600 mt-2">透過烹飪課程、教學影片和社區計畫解決。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🛒</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">食物可及性</h4>
+                    <p class="text-sm text-gray-600 mt-2">識別當地農夫市集、社區菜園和送貨服務。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🍜</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">文化偏好</h4>
+                    <p class="text-sm text-gray-600 mt-2">尊重傳統菜餚，專注於份量控制和更健康的烹飪方法。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">🗣️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社交影響</h4>
+                    <p class="text-sm text-gray-600 mt-2">教導堅定溝通，並在聚會中提供更健康的替代品。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">📰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">衝突的營養資訊</h4>
+                    <p class="text-sm text-gray-600 mt-2">引導患者至權威來源，培養批判性思維。</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon">💊</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">醫療狀況與藥物</h4>
+                    <p class="text-sm text-gray-600 mt-2">需要協調照護，確保飲食建議安全且適當。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">特殊人群與考量</h3>
+            <p class="text-gray-700 mb-4">健康飲食介入必須根據特定群體的需求進行調整：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">👵</span>**老年人：** 營養密度高的食物、足夠的蛋白質和水分。</li>
+                <li class="list-item-container"><span class="list-item-icon">🧒</span>**兒童和青少年：** 平衡飲食以支持生長和認知發展，家庭和學校參與至關重要。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤰</span>**孕婦和哺乳期婦女：** 需要額外的能量、蛋白質、鐵、葉酸和鈣。</li>
+                <li class="list-item-container"><span class="list-item-icon">🩺</span>**慢性病患者：** 可能需要調整巨量營養素分佈和特定營養素的監測。</li>
+                <li class="list-item-container"><span class="list-item-icon">🏋️</span>**運動員和身體活躍者：** 能量和蛋白質需求較高，需將營養與訓練計畫整合。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌱</span>**素食者和純素食者：** 確保維生素B12、鐵、鋅和Omega-3脂肪酸的足夠攝取。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤧</span>**食物過敏或不耐受者：** 需要安全的替代品以維持營養充足。</li>
+                <li class="list-item-container"><span class="list-item-icon">👨‍👩‍👧‍👦</span>**低收入人群：** 可能面臨經濟和可及性障礙，需要社區支持和預算友善的健康飲食教育。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">與其他生活型態醫學支柱的整合</h3>
+            <p class="text-gray-700 mb-4">營養與其他生活型態醫學支柱協同作用，共同促進健康：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🏃</span>**身體活動：** 增強胰島素敏感性和能量平衡。</li>
+                <li class="list-item-container"><span class="list-item-icon">😴</span>**充足睡眠：** 調節食慾激素，減少對高能量食物的渴望。</li>
+                <li class="list-item-container"><span class="list-item-icon">🧘</span>**壓力管理：** 減少情緒性進食，促進正念飲食。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤝</span>**正向社交連結：** 為飲食改變提供支持和責任感。</li>
+                <li class="list-item-container"><span class="list-item-icon">🚭</span>**戒除成癮物質：** 改善味覺、營養吸收和代謝健康。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">監測與評估</h3>
+            <p class="text-gray-700 mb-4">有效的監測確保責任歸屬並允許及時調整：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">📝</span>**飲食評估工具：** 飲食日記、24小時回顧、食物頻率問卷。</li>
+                <li class="list-item-container"><span class="list-item-icon">📏</span>**人體測量：** 體重、BMI、腰圍、身體組成。</li>
+                <li class="list-item-container"><span class="list-item-icon">📊</span>**生理生化標記：** 血壓、空腹血糖、血脂、糖化血色素、炎症標記。</li>
+                <li class="list-item-container"><span class="list-item-icon">📈</span>**患者報告結果：** 能量水平、睡眠品質、情緒。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">未來方向與創新</h3>
+            <p class="text-gray-700 mb-4">營養科學快速發展，未來將朝向更精準和整合的方向發展：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🧬</span>**個人化營養：** 基於遺傳學、代謝組學和微生物組學的精準建議。</li>
+                <li class="list-item-container"><span class="list-item-icon">📱</span>**數位健康技術：** 行動應用程式、穿戴式設備、人工智慧平台提供即時回饋和遠端指導。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌍</span>**永續食物系統：** 強調植物性飲食、減少食物浪費、支持在地農業。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌿</span>**功能性食品與營養保健品：** 源自台灣傳統食材，提供靶向治療益處。</li>
+                <li class="list-item-container"><span class="list-item-icon">🏛️</span>**政策層面介入：** 健康食品補貼、含糖飲料稅、食品行銷法規。</li>
+                <li class="list-item-container"><span class="list-item-icon">☯️</span>**中醫整合：** 將中醫概念與現代營養科學整合。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">健康飲食是生活型態醫學不可或缺的支柱，在台灣預防和管理慢性病方面具有巨大潛力。國際指南和本土研究均支持以蔬菜、水果、全穀物、豆類、堅果、種子、魚和茶為主的飲食，並盡量減少加工肉類、超加工食品、含糖飲料和高脂肪零食。健康台式飲食法（TEA）展示了傳統飲食習慣如何與現代營養科學協調，從而顯著降低全因和心血管死亡率。文化敏感的介入措施，整合營養科學、傳統智慧和實用實施策略，可以賦予個人、家庭和社區採納更健康飲食的能力。臨床實踐、公共衛生政策和社區計畫的協調努力對於創造支持性食物環境和實現人口健康的持續改善至關重要。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚨</span>
+                    <p>台灣健康飲食迫在眉睫。超過一半的台灣成年人超重或肥胖，不健康飲食顯著導致慢性病盛行率上升。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>一般指南強調富含植物、低加工的飲食。國際和國家建議每日至少400克蔬果、全穀物、堅果、豆類，並限制飽和脂肪、反式脂肪、游離糖和鹽的攝入。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🇹🇼</span>
+                    <p>TEA模式融合傳統與科學。TEA強調植物性食物、豆製品、魚、茶和傳統烹飪方法，與台灣人群中顯著降低的全因和心血管死亡率相關。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🔬</span>
+                    <p>實證模式證實益處。地中海飲食和DASH飲食可降低死亡率、心血管事件和血壓，而以植物為主的飲食可降低中風風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🛡️</span>
+                    <p>特定食物提供劑量依賴性保護。全穀物、堅果和魚可降低心血管疾病和死亡率；發酵乳製品可能提供額外益處。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚫</span>
+                    <p>限制有害食物。含糖飲料、加工肉類和超加工食品會增加糖尿病、肥胖和死亡率的風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">☯️</span>
+                    <p>文化智慧是資產。傳統烹飪方法、季節性飲食和共食可被利用來支持健康飲食，同時保持文化認同。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🛠️</span>
+                    <p>實用策略至關重要。個人化評估、目標設定、動機式晤談、家庭和社區參與以及數位工具促進可持續的飲食改變。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🔄</span>
+                    <p>與其他生活型態因素整合可最大化益處。營養與身體活動、睡眠、壓力管理、社交連結和戒除高風險物質協同作用以促進健康。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：黃 Qi-Ya, 吳 Zheng-Yan, 廖 Chia-Te</div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>資料來源：「台灣生活型態醫學共識報告」</p>
+            <p class="text-sm text-gray-400 mt-2">此互動式應用程式僅供學術與說明之用。</p>
+        </div>
+    </footer>
+
+    <script>
+        let charts = {};
+
+        const palette = {
+            red: '#FF6B6B',
+            yellow: '#FFD166',
+            green: '#06D6A0',
+            blue: '#118AB2',
+            darkBlue: '#073B4C',
+            background: '#f0f4f8',
+            text: '#334155'
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: palette.text,
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { display: false }
+                }
+            }
+        };
+
+        function wrapLabels(label, maxLength) {
+            if (label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function createCharts() {
+            const mediterraneanDietMortalityChartCtx = document.getElementById('mediterraneanDietMortalityChart');
+            if (mediterraneanDietMortalityChartCtx) {
+                if (charts.mediterraneanDietMortalityChart) charts.mediterraneanDietMortalityChart.destroy();
+                charts.mediterraneanDietMortalityChart = new Chart(mediterraneanDietMortalityChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['全因死亡率降低 (%)', '心血管死亡率顯著降低'],
+                        datasets: [{
+                            label: '降低百分比',
+                            data: [38.5, 100], // Average of 21-56% is 38.5%. 100% for "significant reduction"
+                            backgroundColor: [palette.green, palette.blue],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 100,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const dashDietBloodPressureChartCtx = document.getElementById('dashDietBloodPressureChart');
+            if (dashDietBloodPressureChartCtx) {
+                if (charts.dashDietBloodPressureChart) charts.dashDietBloodPressureChart.destroy();
+                charts.dashDietBloodPressureChart = new Chart(dashDietBloodPressureChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['收縮壓降低 (mmHg)', '舒張壓降低 (mmHg)'],
+                        datasets: [{
+                            label: '降低值',
+                            data: [6.7, 3.5],
+                            backgroundColor: [palette.yellow, palette.orange],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                title: { display: true, text: '降低值 (mmHg)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const teaMortalityCtx = document.getElementById('teaMortalityChart');
+            if (teaMortalityCtx) {
+                if (charts.teaMortalityChart) charts.teaMortalityChart.destroy();
+                charts.teaMortalityChart = new Chart(teaMortalityCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['全因死亡風險降低', '剩餘風險'],
+                        datasets: [{
+                            data: [36, 64],
+                            backgroundColor: [palette.green, '#e9ecef'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: { ...defaultChartOptions, cutout: '70%',
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '↓ 36% 全因死亡風險', color: palette.darkBlue, font: { size: 16, weight: 'bold' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const teaCardiovascularMortalityChartCtx = document.getElementById('teaCardiovascularMortalityChart');
+            if (teaCardiovascularMortalityChartCtx) {
+                if (charts.teaCardiovascularMortalityChart) charts.teaCardiovascularMortalityChart.destroy();
+                charts.teaCardiovascularMortalityChart = new Chart(teaCardiovascularMortalityChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['心血管死亡風險降低', '剩餘風險'],
+                        datasets: [{
+                            data: [48, 52],
+                            backgroundColor: [palette.blue, '#e9ecef'],
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: { ...defaultChartOptions, cutout: '70%',
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false },
+                            title: { display: true, text: '↓ 48% 心血管死亡風險', color: palette.darkBlue, font: { size: 16, weight: 'bold' } }
+                        },
+                        scales: { y: { display: false }, x: { display: false } }
+                    }
+                });
+            }
+
+            const fishConsumptionChartCtx = document.getElementById('fishConsumptionChart');
+            if (fishConsumptionChartCtx) {
+                if (charts.fishConsumptionChart) charts.fishConsumptionChart.destroy();
+                charts.fishConsumptionChart = new Chart(fishConsumptionChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['每增加20克/天魚類攝取'],
+                        datasets: [{
+                            label: '心血管死亡率降低 (%)',
+                            data: [4],
+                            backgroundColor: [palette.green],
+                            borderRadius: 4,
+                            barPercentage: 0.5
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 10,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const wholeGrainChartCtx = document.getElementById('wholeGrainChart');
+            if (wholeGrainChartCtx) {
+                if (charts.wholeGrainChart) charts.wholeGrainChart.destroy();
+                charts.wholeGrainChart = new Chart(wholeGrainChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['高全穀物攝取', '每增加90克/天'],
+                        datasets: [{
+                            label: '心血管疾病風險降低 (%)',
+                            data: [16, 22],
+                            backgroundColor: [palette.blue, palette.darkBlue],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 25,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const nutConsumptionChartCtx = document.getElementById('nutConsumptionChart');
+            if (nutConsumptionChartCtx) {
+                if (charts.nutConsumptionChart) charts.nutConsumptionChart.destroy();
+                charts.nutConsumptionChart = new Chart(nutConsumptionChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [wrapLabels('冠心病風險降低', 10), wrapLabels('心血管疾病風險降低', 10), wrapLabels('全因死亡率降低', 10)],
+                        datasets: [{
+                            label: '降低百分比 (%)',
+                            data: [29, 21, 22],
+                            backgroundColor: [palette.yellow, palette.orange, palette.red],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { ...defaultChartOptions,
+                        plugins: { ...defaultChartOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                ...defaultChartOptions.scales.y,
+                                beginAtZero: true,
+                                max: 35,
+                                title: { display: true, text: '降低百分比 (%)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            createCharts();
+        });
+    </script>
+</body>
+</html>

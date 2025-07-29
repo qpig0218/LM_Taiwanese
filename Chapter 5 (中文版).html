@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <title>台灣生活型態醫學共識報告 - 第五章 身體活動</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            text-align: center;
+            border-bottom: 8px solid #118AB2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #073B4C;
+            line-height: 1;
+        }
+        .kpi-label {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            color: #118AB2;
+            line-height: 1.6;
+        }
+        .data-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            color: #118AB2;
+            margin-bottom: 0.5rem;
+        }
+        .list-item-icon {
+            font-size: 1.25rem;
+            color: #06D6A0;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .list-item-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .take-home-message-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .take-home-icon {
+            font-size: 1.5rem;
+            color: #118AB2;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+        .strategy-card {
+            background-color: #e0f2f7;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+        }
+        .strategy-card:hover {
+            background-color: #ceeef8;
+        }
+        .strategy-icon {
+            font-size: 3.5rem;
+            color: #073B4C;
+            margin-bottom: 0.75rem;
+        }
+        .challenge-card {
+            background-color: #ffebeb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #FF6B6B;
+        }
+        .challenge-icon {
+            font-size: 3rem;
+            color: #FF6B6B;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-[#073B4C] text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">台灣生活型態醫學共識報告</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light text-gray-300">一個為全人健康打造的文化適應新典範</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="chapter5_content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第五章 身體活動</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">身體活動是預防和管理慢性病、促進健康老化和提升生活品質最有效且易於獲得的介入措施之一。本章將探討身體活動的生理基礎、全球與國家指南、評估與處方，以及台灣特有的考量與策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">身體活動的重要性與台灣現況</h3>
+            <p class="text-gray-700 mb-4">身體活動對心血管、代謝、肌肉骨骼、神經和免疫系統都有益處，並延伸至心理健康、認知功能和社會福祉。然而，台灣在推廣身體活動方面面臨獨特挑戰：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">D+</div>
+                    <div class="kpi-label">2022年台灣兒童青少年身體活動報告卡評級</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">#6</div>
+                    <div class="kpi-label">台灣在全球20個國家中，每日久坐時間超過六小時的人口排名</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">COVID-19疫情進一步加劇了久坐時間的增加和規律運動的減少。了解這些背景因素對於制定符合台灣文化、實用且可持續的介入措施至關重要。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">身體活動的生理基礎</h3>
+            <p class="text-gray-700 mb-4">身體活動是指任何由骨骼肌產生並導致能量消耗高於靜息水平的身體運動。它包括結構化運動、體育參與、職業活動、家務、交通相關活動和休閒活動。了解規律運動的生理機制對於制定有效介入措施和向患者及社區傳達積極運動的重要性至關關重要。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">❤️</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">心血管與代謝適應</h4>
+                    <p class="text-sm text-gray-600">強化心肌、改善心輸出效率、降低靜息心率和血壓、提升胰島素敏感性。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">💪</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">肌肉骨骼效益</h4>
+                    <p class="text-sm text-gray-600">增加骨密度、增強肌肉力量和耐力、改善柔韌性和平衡、降低跌倒和骨折風險。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🧠</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">神經與認知效益</h4>
+                    <p class="text-sm text-gray-600">增強大腦功能、改善記憶和執行功能、降低認知衰退和失智症風險。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🛡️</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">免疫效益</h4>
+                    <p class="text-sm text-gray-600">增強免疫功能、減少全身性炎症、提高對感染和慢性病的抵抗力。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">全球與國家身體活動指南</h3>
+            <p class="text-gray-700 mb-4">世界衛生組織 (WHO) 提供基於實證的各年齡層建議。台灣已將這些國際指南在地化，以適應當地需求和情況，同時保持與全球證據的一致性。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">成人 (18-64歲) 建議</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">⏱️</span>每週至少 150-300 分鐘中等強度有氧活動，或 75-150 分鐘高強度活動。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🏋️</span>每週兩天或以上進行主要肌肉群的肌力訓練。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">老年人 (≥65歲) 建議</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">⏱️</span>與成人建議量相似。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⚖️</span>強調增強平衡和預防跌倒的活動 (每週三天或以上)。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4 col-span-full">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">兒童青少年 (5-17歲) 建議</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">⏱️</span>每天至少 60 分鐘中等至高強度活動，大部分為有氧活動。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🦴</span>每週至少三天進行肌力和骨骼強化活動。</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">醫療提供者必須使用 FITT-VP 原則（頻率、強度、時間、類型、總量和進展）將一般指南適應於個體情況和目標。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">身體活動評估與處方</h3>
+            <p class="text-gray-700 mb-4">有效的介入始於對當前活動水平、體能狀況、健康狀況和個人偏好的全面評估。評估應涵蓋體能的多個組成部分，並作為個體化運動處方的基礎。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">評估工具</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">📝</span>**自我報告問卷：** 國際身體活動問卷 (IPAQ) 台灣版。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⌚</span>**客觀監測：** 加速計和其他穿戴式設備。</li>
+                        <li class="list-item-container"><span class="list-item-icon">👵</span>**老年人體能測試：** 針對老年人驗證，評估上下肢力量、心血管耐力、柔韌性和動態平衡。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">FITT-VP 運動處方框架</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🔢</span>**頻率 (Frequency)：** 活動進行的頻率。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⚡</span>**強度 (Intensity)：** 活動的強度 (心率區間、自覺用力程度、代謝當量)。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⏰</span>**時間 (Time)：** 每次活動的持續時間。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🚶‍♀️</span>**類型 (Type)：** 活動模式 (步行、騎自行車、游泳、阻力訓練)。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📏</span>**總量 (Volume)：** 頻率 × 強度 × 時間 的總體測量。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📈</span>**進展 (Progression)：** 逐步增加活動量以降低受傷風險並提高依從性。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣特有的身體活動考量</h3>
+            <p class="text-gray-700 mb-4">在台灣實施身體活動介入必須考慮獨特的文化、環境和社會因素：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">☀️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">氣候與環境</h4>
+                    <p class="text-sm text-gray-600 mt-2">亞熱帶氣候允許全年戶外活動，但高溫高濕需注意補水和運動時間。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏙️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">都市密度</h4>
+                    <p class="text-sm text-gray-600 mt-2">促進活躍交通，但也帶來空氣污染、交通安全和綠地有限的挑戰。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">☯️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">傳統團體活動</h4>
+                    <p class="text-sm text-gray-600 mt-2">太極拳、氣功和民俗舞蹈在老年人中流行，提供身心和文化益處。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">💼</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">工作文化</h4>
+                    <p class="text-sm text-gray-600 mt-2">長工時和高工作壓力導致久坐，需將短暫運動融入工作日。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">👨‍👩‍👧‍👦</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">家庭義務</h4>
+                    <p class="text-sm text-gray-600 mt-2">家庭義務和跨代同居可能限制正式運動時間，可透過家庭參與式介入支持集體運動。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🚲</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">YouBike系統</h4>
+                    <p class="text-sm text-gray-600 mt-2">台灣的YouBike公共自行車租賃系統是活躍交通的創新方式。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">解決久坐行為</h3>
+            <p class="text-gray-700 mb-4">久坐行為是慢性病和死亡的獨立風險因素。台灣的每日久坐時間在全球名列前茅，近三分之一的老年人久坐時間長，這與不良健康結果相關。即使達到身體活動建議量，這些風險仍然存在，凸顯了減少和中斷長時間久坐的必要性。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">久坐的健康風險</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">📈</span>增加慢性病和死亡風險。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📉</span>即使身體活躍也無法完全消除風險。</li>
+                        <li class="list-item-container"><span class="list-item-icon">👵</span>近三分之一的台灣老年人久坐時間長。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">減少久坐策略</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🪑</span>**環境改造：** 站立式辦公桌、步行會議。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🚶</span>**行為介入：** 限制螢幕時間、每30分鐘短暫活動休息。</li>
+                        <li class="list-item-container"><span class="list-item-icon">📱</span>**科技支持：** 智慧型手機應用程式、穿戴式設備提醒。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">特殊人群與適應</h3>
+            <p class="text-gray-700 mb-4">身體活動介入必須根據特定人群的多元需求進行調整：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">👵</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">老年人</h4>
+                    <p class="text-sm text-gray-600 mt-2">多組分計畫（有氧、阻力、平衡、柔韌性），預防跌倒，維持功能獨立。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🧒</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">兒童和青少年</h4>
+                    <p class="text-sm text-gray-600 mt-2">學校體育、活躍的課間休息和課後計畫，以及家長參與。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🩺</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">慢性病患者</h4>
+                    <p class="text-sm text-gray-600 mt-2">針對心血管疾病、糖尿病、癌症倖存者和殘疾人士的專業計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🤰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">孕婦</h4>
+                    <p class="text-sm text-gray-600 mt-2">根據產科指南調整身體活動，支持母嬰健康。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">科技整合與創新</h3>
+            <p class="text-gray-700 mb-4">台灣的科技基礎設施為運動推廣提供了創新方法：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">⌚</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">穿戴式健身設備</h4>
+                    <p class="text-sm text-gray-600 mt-2">監測步數、距離、能量消耗、心率和睡眠，遊戲化功能增強動機。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📱</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">行動健康應用程式</h4>
+                    <p class="text-sm text-gray-600 mt-2">提供個人化運動計畫、影片示範和即時回饋。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🎮</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">虛擬與擴增實境</h4>
+                    <p class="text-sm text-gray-600 mt-2">創造沉浸式訓練和康復體驗。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon"> telehealth</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">遠距醫療與遠端監測</h4>
+                    <p class="text-sm text-gray-600 mt-2">醫療提供者無需親自就診即可支持運動計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🤖</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">人工智慧與機器學習</h4>
+                    <p class="text-sm text-gray-600 mt-2">分析活動數據以個人化建議、預測依從模式和優化介入策略。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">💬</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社交媒體與線上社區</h4>
+                    <p class="text-sm text-gray-600 mt-2">促進同儕支持、問責制和共享經驗。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">臨床實施與醫療整合</h3>
+            <p class="text-gray-700 mb-4">將身體活動成功整合到臨床實踐中，需要系統性方法，包括提供者培訓、工作流程整合、患者評估和諮詢，以及持續追蹤。「運動即良藥」(Exercise is Medicine) 等倡議在台灣已獲採納，推廣將身體活動作為生命徵象的常規評估，並將運動處方作為標準照護的一部分。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">🎓</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">提供者培訓</h4>
+                    <p class="text-sm text-gray-600 mt-2">醫療提供者需具備運動科學、評估方法、處方原則和行為改變技術知識。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🔄</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">工作流程整合</h4>
+                    <p class="text-sm text-gray-600 mt-2">電子健康記錄應納入活動水平和處方文件模板。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📝</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">標準化評估工具</h4>
+                    <p class="text-sm text-gray-600 mt-2">如身體活動生命徵象、IPAQ簡表。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🔗</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">轉介網絡</h4>
+                    <p class="text-sm text-gray-600 mt-2">將患者轉介至社區資源，如健身設施和運動計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🗓️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">規律追蹤</h4>
+                    <p class="text-sm text-gray-600 mt-2">定期回診評估進度、解決障礙並修改處方。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏛️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">政策與給付</h4>
+                    <p class="text-sm text-gray-600 mt-2">醫療政策和給付結構應支持身體活動推廣。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">社區基礎介入與政策</h3>
+            <p class="text-gray-700 mb-4">人口層面的方法透過創造有利於活躍生活的環境來補充個體介入。社區計畫、學校計畫和職場健康計畫提供運動機會，並解決久坐行為。對建成環境的改造（如改善步行道、自行車道）可促進活躍交通和休閒活動。台灣的YouBike公共自行車租賃系統是活躍交通的創新典範。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏘️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">社區計畫</h4>
+                    <p class="text-sm text-gray-600 mt-2">團體運動課程、步行俱樂部、體育聯盟和娛樂活動。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">學校計畫</h4>
+                    <p class="text-sm text-gray-600 mt-2">優質體育教育、活躍的課間休息和課後計畫。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏢</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">職場健康計畫</h4>
+                    <p class="text-sm text-gray-600 mt-2">現場設施、有組織的活動和支持活躍通勤的政策。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🌳</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">建成環境改造</h4>
+                    <p class="text-sm text-gray-600 mt-2">改善步行道、自行車道、公園和娛樂設施。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🚌</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">公共交通政策</h4>
+                    <p class="text-sm text-gray-600 mt-2">優先考慮步行、騎自行車和公共交通使用。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏛️</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">醫療政策倡議</h4>
+                    <p class="text-sm text-gray-600 mt-2">透過給付機制、品質測量和提供者教育支持身體活動介入。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">監測與評估</h3>
+            <p class="text-gray-700 mb-4">全面的監測和評估對於評估身體活動介入的有效性至關重要：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">📈</span>**過程評估：** 衡量覆蓋範圍、劑量、忠實性和參與者滿意度。</li>
+                <li class="list-item-container"><span class="list-item-icon">📊</span>**結果測量：** 評估活動水平、體能參數、健康指標和生活品質的變化。</li>
+                <li class="list-item-container"><span class="list-item-icon">✅</span>**綜合測量：** 結合自我報告和客觀測量。</li>
+                <li class="list-item-container"><span class="list-item-icon">💰</span>**成本效益分析：** 比較介入成本與健康益處和醫療費用節省。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">未來方向與創新</h3>
+            <p class="text-gray-700 mb-4">身體活動推廣領域持續發展，未來將朝向更精準、數位化和整合的方向邁進：</p>
+            <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                <li class="list-item-container"><span class="list-item-icon">🧬</span>**精準醫學：** 基於遺傳和代謝特徵的個人化運動處方。</li>
+                <li class="list-item-container"><span class="list-item-icon">💻</span>**數位療法：** 透過數位平台提供基於實證的、可擴展的個人化介入。</li>
+                <li class="list-item-container"><span class="list-item-icon">🤖</span>**人工智慧與機器學習：** 個人化指導和優化介入策略。</li>
+                <li class="list-item-container"><span class="list-item-icon">🎮</span>**虛擬與擴增實境：** 創造沉浸式訓練和康復體驗。</li>
+                <li class="list-item-container"><span class="list-item-icon">⏱️</span>**微介入與即時適應性介入：** 提供基於即時需求評估的簡短、及時支持。</li>
+                <li class="list-item-container"><span class="list-item-icon">🔄</span>**整合其他LM組件：** 與營養、睡眠、壓力管理等協同作用。</li>
+                <li class="list-item-container"><span class="list-item-icon">🌍</span>**人口健康方法：** 解決健康的社會決定因素，減少活動參與和結果的差異。</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">身體活動是生活型態醫學的基礎支柱，在預防和管理慢性病、促進最佳健康和福祉方面具有巨大潛力。其益處廣泛且令人信服，涵蓋心血管、代謝、肌肉骨骼、神經和免疫健康以及心理福祉。台灣面臨久坐行為盛行、人口結構變化和快速城市化等獨特挑戰，同時也擁有先進的技術基礎設施和豐富的文化傳統等獨特機遇。整合個體層面介入、社區計畫和支持性政策的全面策略至關重要。醫療提供者必須常規評估活動、提供個人化處方並持續支持。技術可以增強但不能取代專業指導和社會支持。修改環境和政策的人口層面方法對於可持續的改變是必要的。隨著台灣應對人口老化和慢性病負擔增加的挑戰，基於實證的規律中等強度身體活動推廣將仍然是健康促進和疾病預防的核心。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💡</span>
+                    <p>規律身體活動對多個生理系統有廣泛益處，對預防和管理台灣常見慢性病至關重要。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>WHO建議（每週150-300分鐘中等強度有氧活動加肌力訓練）適用於台灣人群，應根據個人情況和文化偏好進行調整。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🪑</span>
+                    <p>久坐行為獨立有害；台灣是每日久坐時間最長的國家之一，需要有針對性的策略來減少和中斷長時間久坐。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🏥</span>
+                    <p>醫療提供者應將身體活動作為生命徵象進行評估，並使用FITT-VP框架提供個人化運動處方，考慮台灣特有的文化和環境因素。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🌐</span>
+                    <p>技術整合、社區計畫和支持性政策對於全面推廣活躍生活至關重要，以解決個人、社會和環境決定因素。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：許 Xuan, 朱 Li-Ping, 廖 Chia-Te</div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>資料來源：「台灣生活型態醫學共識報告」</p>
+            <p class="text-sm text-gray-400 mt-2">此互動式應用程式僅供學術與說明之用。</p>
+        </div>
+    </footer>
+
+    <script>
+        let charts = {};
+
+        const palette = {
+            red: '#FF6B6B',
+            yellow: '#FFD166',
+            green: '#06D6A0',
+            blue: '#118AB2',
+            darkBlue: '#073B4C',
+            background: '#f0f4f8',
+            text: '#334155'
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: palette.text,
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { display: false }
+                }
+            }
+        };
+
+        function wrapLabels(label, maxLength) {
+            if (label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function createCharts() {
+            // No specific charts from numerical data found in the provided text for Chapter 5.
+            // Keeping this function for consistency, in case future data points are added.
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            createCharts();
+        });
+    </script>
+</body>
+</html>

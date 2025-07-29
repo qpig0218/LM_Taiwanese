@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <title>台灣生活型態醫學共識報告 - 第八章 戒除成癮物質</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            text-align: center;
+            border-bottom: 8px solid #118AB2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #073B4C;
+            line-height: 1;
+        }
+        .kpi-label {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            color: #118AB2;
+            line-height: 1.6;
+        }
+        .data-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            color: #118AB2;
+            margin-bottom: 0.5rem;
+        }
+        .list-item-icon {
+            font-size: 1.25rem;
+            color: #06D6A0;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .list-item-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .take-home-message-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .take-home-icon {
+            font-size: 1.5rem;
+            color: #118AB2;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+        .strategy-card {
+            background-color: #e0f2f7;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+        }
+        .strategy-card:hover {
+            background-color: #ceeef8;
+        }
+        .strategy-icon {
+            font-size: 3.5rem;
+            color: #073B4C;
+            margin-bottom: 0.75rem;
+        }
+        .risk-card {
+            background-color: #ffebeb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #FF6B6B;
+        }
+        .risk-icon {
+            font-size: 3rem;
+            color: #FF6B6B;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-[#073B4C] text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">台灣生活型態醫學共識報告</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light text-gray-300">一個為全人健康打造的文化適應新典範</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="chapter8_content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第八章 戒除成癮物質</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">戒除高風險物質是生活型態醫學的核心支柱。本章將探討台灣特有的物質使用模式，包括檳榔嚼食、菸草吸食、酒精消費、新型精神活性物質（NPS）和甲基安非他命使用，以及應對這些行為的文化敏感性介入措施。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">檳榔嚼食：台灣特有的健康威脅</h3>
+            <p class="text-gray-700 mb-4">檳榔嚼食在東南亞許多文化中根深蒂固，在台灣部分地區（特別是男性和體力勞動者）仍然普遍。大規模流行病學研究一致顯示，檳榔使用與口腔和全身性疾病之間存在強烈關聯。它已被歸類為第一類致癌物，並與代謝症候群、心血管疾病和全因死亡率相關。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">7.9x</div>
+                    <div class="kpi-label">習慣性檳榔嚼食者口腔癌相對風險</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">44%↑</div>
+                    <div class="kpi-label">檳榔使用獨立增加慢性腎病風險</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">50%</div>
+                    <div class="kpi-label">台灣口腔癌歸因於檳榔嚼食</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">18.9x</div>
+                    <div class="kpi-label">重度嚼食者慢性肝病風險 (>30年)</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">**檳榔減量策略：** 有效的介入措施包括文化適應的健康教育、行為諮詢和社區計畫，強調檳榔的致癌性及其與菸草和酒精的協同效應。戒除計畫應強調戒斷可降低癌症和肝病風險，並提供替代的壓力應對策略。台灣的公共衛生運動已成功減少檳榔種植和銷售，持續監管工作場所和學校的銷售和嚼食至關重要。口腔健康專業人員和基層醫療提供者應常規篩查檳榔使用並提供簡短諮詢和轉介戒斷服務。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">菸草吸食：可預防的死亡主因</h3>
+            <p class="text-gray-700 mb-4">菸草仍然是台灣可預防死亡的主要原因。青少年時期開始吸菸並持續到成年的人，預期壽命約減少10年。戒菸可大幅降低風險：40歲前戒菸可減少約90%的吸菸相關死亡率，持續吸菸者約三分之二的死亡是可以避免的。吸菸還與檳榔和酒精使用產生協同作用，放大癌症和心血管風險。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">10年↓</div>
+                    <div class="kpi-label">吸菸者預期壽命平均減少</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">90%↓</div>
+                    <div class="kpi-label">40歲前戒菸可減少吸菸相關死亡率</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">**實證戒菸療法：** 藥物治療可顯著提高戒菸率。尼古丁替代療法（NRT）和安非他酮可幫助約80%的吸菸者實現長期戒斷。伐尼克林是單一藥物中最有效的，6個月戒斷率比安慰劑高約2.7倍。行為支持也至關重要，包括醫師的簡短建議、結構化諮詢、戒菸專線和簡訊介入。無菸立法、稅收和大眾媒體宣傳活動可補充臨床介入措施。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">酒精：無安全攝取量</h3>
+            <p class="text-gray-700 mb-4">酒精在台灣社會中廣泛消費，常作為社交和商業互動的一部分，但越來越多的證據表明，沒有任何程度的酒精消費是安全的。酒精導致全球5.3%的死亡，是15-49歲人群死亡的主要風險因素。即使少量飲酒也會增加癌症風險。在東亞人群中，乙醛脫氫酶2 (ALDH2) 缺乏症的盛行率很高，導致乙醛積聚，即使在低酒精攝入量下也會顯著提高食道癌和頭頸癌的風險。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="risk-card">
+                    <div class="risk-icon">💀</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">全球死亡率歸因</h4>
+                    <p class="text-sm text-gray-600">酒精使用佔全球死亡的5.3%。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">肝</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">肝硬化歸因</h4>
+                    <p class="text-sm text-gray-600">酒精導致48%的肝硬化。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">👄</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">口腔癌歸因</h4>
+                    <p class="text-sm text-gray-600">酒精導致26%的口腔癌。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">腸</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">結腸癌歸因</h4>
+                    <p class="text-sm text-gray-600">酒精導致11%的結腸癌。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">🎀</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">乳腺癌歸因</h4>
+                    <p class="text-sm text-gray-600">酒精導致5%的乳腺癌。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">🚫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">ALDH2 缺乏症風險</h4>
+                    <p class="text-sm text-gray-600">東亞人群中，低酒精攝入量也顯著提高食道癌和頭頸癌風險。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">**減害與治療方法：** 鑑於沒有安全水平，公共衛生建議鼓勵避免或最低限度消費。應將酒精使用障礙篩查工具納入基層醫療。簡短介入和動機式晤談可減少危險飲酒。對於酒精使用障礙患者，行為療法和藥物治療是循證治療方法。限制可及性和行銷、提高價格和執行酒駕法規是有效的人口層面措施。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">新型精神活性物質 (NPS) 與甲基安非他命：新興威脅</h3>
+            <p class="text-gray-700 mb-4">新型精神活性物質是合成化合物，旨在模仿傳統藥物的效果同時規避法律檢測。由於通常不受監管，其成分和效力差異很大，導致不可預測且有時致命的毒性。甲基安非他命使用在台灣一般人群中較不普遍，但在特定群體中已成為一個嚴重的問題。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="risk-card">
+                    <div class="risk-icon">🧪</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">NPS 風險</h4>
+                    <p class="text-sm text-gray-600">成分和效力不可預測，導致心律不整、心肌梗塞、猝死、精神病、癲癇、急性腎損傷等。</p>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-icon">🚫💊</div>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">甲基安非他命無核准藥物</h4>
+                    <p class="text-sm text-gray-600">無美國FDA核准的藥物治療，主要依賴行為療法。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">**臨床管理與預防：** NPS使用障礙沒有核准的藥物治療。急性毒性管理側重於支持性照護和症狀導向治療。長期管理依賴行為療法、減害諮詢和解決潛在的精神健康或社會問題。醫療提供者應教育患者NPS的不可預測效力和污染風險。政策措施應實現新物質的快速列管並改進早期預警系統。對於甲基安非他命使用障礙，循證方法包括認知行為療法、獎勵管理和動機式晤談。減害策略和社區支持團體也很重要。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">高風險物質使用是台灣發病率和死亡率的可改變驅動因素。檳榔嚼食顯著增加口腔癌、慢性腎病和肝病的風險，而吸菸會使預期壽命減少約十年並導致癌症和心血管疾病。酒精消費沒有安全閾值，並與全球大量死亡和多種癌症有關。合成藥物和甲基安非他命帶來新興威脅，具有嚴重毒性且無核准藥物治療。基於實證的介入措施—包括文化適應的健康教育、菸酒使用障礙的藥物和行為治療、檳榔和甲基安非他命戒斷的行為療法，以及監管政策—對於減少物質相關危害至關重要。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">⚠️</span>
+                    <p>檳榔嚼食具高度致癌性和腎毒性，使口腔癌風險增加八倍，並導致慢性腎病和肝硬化。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚬</span>
+                    <p>吸菸顯著縮短預期壽命，約減少十年；40歲前戒菸可減少約90%的吸菸相關死亡率。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🍷</span>
+                    <p>酒精無安全攝取量，導致全球超過5%的死亡，即使低劑量也會增加癌症風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🧪</span>
+                    <p>新型精神活性物質不可預測且危險，可導致心律不整、心肌梗塞、猝死、精神病和器官衰竭。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚫💊</span>
+                    <p>甲基安非他命使用障礙無核准藥物，治療依賴認知行為療法、獎勵管理和動機式晤談。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：黃 Bo-Yu, 張 Zhi-Cheng, 廖 Chia-Te</div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>資料來源：「台灣生活型態醫學共識報告」</p>
+            <p class="text-sm text-gray-400 mt-2">此互動式應用程式僅供學術與說明之用。</p>
+        </div>
+    </footer>
+
+    <script>
+        let charts = {};
+
+        const palette = {
+            red: '#FF6B6B',
+            yellow: '#FFD166',
+            green: '#06D6A0',
+            blue: '#118AB2',
+            darkBlue: '#073B4C',
+            background: '#f0f4f8',
+            text: '#334155'
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: palette.text,
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { display: false }
+                }
+            }
+        };
+
+        function wrapLabels(label, maxLength) {
+            if (label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function createCharts() {
+            // No charts specified for this chapter in the provided text, but keeping the function for consistency.
+            // If charts are needed for Chapter 8, they would be defined here.
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            createCharts();
+        });
+    </script>
+</body>
+</html>

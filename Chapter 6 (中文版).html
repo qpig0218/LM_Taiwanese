@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <title>台灣生活型態醫學共識報告 - 第六章 修復性睡眠</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            text-align: center;
+            border-bottom: 8px solid #118AB2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .kpi-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #073B4C;
+            line-height: 1;
+        }
+        .kpi-label {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            color: #118AB2;
+            line-height: 1.6;
+        }
+        .data-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        .category-icon {
+            font-size: 2.5rem;
+            color: #118AB2;
+            margin-bottom: 0.5rem;
+        }
+        .list-item-icon {
+            font-size: 1.25rem;
+            color: #06D6A0;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+        .list-item-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .take-home-message-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .take-home-icon {
+            font-size: 1.5rem;
+            color: #118AB2;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+        .strategy-card {
+            background-color: #e0f2f7;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+        }
+        .strategy-card:hover {
+            background-color: #ceeef8;
+        }
+        .strategy-icon {
+            font-size: 3.5rem;
+            color: #073B4C;
+            margin-bottom: 0.75rem;
+        }
+        .challenge-card {
+            background-color: #ffebeb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #FF6B6B;
+        }
+        .challenge-icon {
+            font-size: 3rem;
+            color: #FF6B6B;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-[#073B4C] text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">台灣生活型態醫學共識報告</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light text-gray-300">一個為全人健康打造的文化適應新典範</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="chapter6_content">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-[#073B4C] mb-4">第六章 修復性睡眠</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">睡眠是生物必需品，也是健康生活的基石。本章探討修復性睡眠的重要性及其對健康的影響，並解析台灣普遍存在的睡眠問題與生活型態醫學的應對策略。</p>
+            
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">睡眠的生理與功能</h3>
+            <p class="text-gray-700 mb-4">人體睡眠由生理時鐘和睡眠穩態兩種相互作用的過程調節。睡眠週期約每90-110分鐘經歷非快速眼動（NREM）和快速眼動（REM）階段。充足的睡眠是認知功能、代謝調節和免疫能力的基礎。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">😴</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">深度NREM睡眠</h4>
+                    <p class="text-sm text-gray-600">支持組織修復、免疫監測和代謝穩態（高生長激素和泌乳素，低皮質醇）。</p>
+                </div>
+                <div class="data-card p-4 flex flex-col items-center text-center">
+                    <span class="category-icon">🧠</span>
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">REM睡眠</h4>
+                    <p class="text-sm text-gray-600">與記憶鞏固、情緒處理和突觸可塑性相關。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">研究顯示，學習前睡眠剝奪會顯著損害記憶編碼（效果量約0.62），學習後睡眠不足會降低記憶鞏固（效果量約0.28）。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">台灣睡眠障礙的流行病學與決定因素</h3>
+            <p class="text-gray-700 mb-4">台灣睡眠問題普遍，國家調查顯示約四分之一的成年人有失眠困擾，近半數受訪者睡眠品質不佳，平均每晚睡眠時間約5.5小時。此外，有420萬人經常使用安眠藥。這些令人擔憂的統計數據凸顯了將睡眠修復納入生活型態醫學計畫的重要性。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="kpi-card">
+                    <div class="kpi-number">25%</div>
+                    <div class="kpi-label">台灣成年人失眠盛行率</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">46.6%</div>
+                    <div class="kpi-label">台灣成年人睡眠品質不佳比例</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">5.5h</div>
+                    <div class="kpi-label">台灣成年人平均每晚睡眠時間</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-number">420萬</div>
+                    <div class="kpi-label">台灣經常使用安眠藥的人數</div>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">導致睡眠不佳的因素包括輪班工作、高壓工作與學業、通勤時間長、照護責任、環境噪音和光污染，以及不健康的生活習慣（如晚餐過重、咖啡因、檳榔、吸菸、飲酒）和慢性病（如慢性疼痛、精神疾病、阻塞性睡眠呼吸中止症）。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">睡眠不足的健康後果</h3>
+            <p class="text-gray-700 mb-4">睡眠時間不足是心臟代謝疾病的已知風險因素，並對免疫、炎症、認知和心理健康產生負面影響。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">心血管與代謝結果</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">❤️</span>睡眠 ≤5-6 小時，心血管疾病風險增加 9%。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🍬</span>睡眠 5 小時，第二型糖尿病風險高 16%；3-4 小時，風險高 41%。</li>
+                        <li class="list-item-container"><span class="list-item-icon">⚖️</span>每少睡 1 小時（少於 7 小時），糖尿病風險增加約 9%。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">免疫與炎症後果</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🛡️</span>單晚睡眠限制會降低自然殺手細胞活性，抑制疫苗抗體反應。</li>
+                        <li class="list-item-container"><span class="list-item-icon">🔥</span>慢性睡眠剝奪引發全身性低度炎症，增加感染和自身免疫疾病易感性。</li>
+                    </ul>
+                </div>
+                <div class="data-card p-4 col-span-full">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">認知與心理健康影響</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                        <li class="list-item-container"><span class="list-item-icon">🧠</span>睡眠不足損害注意力、決策和情緒調節，顯著影響記憶編碼和鞏固。</li>
+                        <li class="list-item-container"><span class="list-item-icon">😔</span>失眠使罹患憂鬱症的風險增加一倍以上（相對風險約 2.3）。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">生活型態醫學的睡眠修復策略</h3>
+            <p class="text-gray-700 mb-4">生活型態醫學優先採用非藥物介入來改善睡眠時間和品質。實證策略包括睡眠衛生教育、規律身體活動、失眠認知行為療法（CBT-I）、放鬆技巧和優化睡眠環境。</p>
+            
+            <h4 class="font-bold text-xl text-[#073B4C] mb-4">睡眠衛生核心建議</h4>
+            <p class="text-gray-700 mb-4">睡眠衛生包括支持健康睡眠的行為和環境實踐。核心建議如下：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">⏰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">規律作息</h4>
+                    <p class="text-sm text-gray-600 mt-2">保持一致的睡眠-清醒時間表。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏃</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">規律日間運動</h4>
+                    <p class="text-sm text-gray-600 mt-2">從事規律的日間運動。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">☕🚫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">避免刺激物</h4>
+                    <p class="text-sm text-gray-600 mt-2">睡前避免咖啡因、尼古丁和酒精。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🍽️🚫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">限制夜間進食</h4>
+                    <p class="text-sm text-gray-600 mt-2">限制深夜進食。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">📱💡🚫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">減少光線與螢幕</h4>
+                    <p class="text-sm text-gray-600 mt-2">減少傍晚接觸明亮光線和螢幕。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🛌</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">優化臥室環境</h4>
+                    <p class="text-sm text-gray-600 mt-2">創造涼爽、黑暗、安靜的臥室。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">將這些原則適應台灣的背景，包括解決傍晚高茶葉消費、限制檳榔嚼食以及管理人口密集區的噪音和光污染。</p>
+
+            <h4 class="font-bold text-xl text-[#073B4C] mb-4">身體活動對睡眠的益處</h4>
+            <p class="text-gray-700 mb-4">規律運動透過多種機制改善睡眠，包括生理時鐘調整、溫度調節和壓力減輕。統合分析顯示，運動介入顯著改善主觀睡眠品質，減少PSQI和失眠嚴重度指數分數，且副作用極小。有氧和阻力訓練均有益處。在台灣，將步行、騎自行車和太極拳等身體活動融入日常生活中，可同時解決久坐行為和睡眠問題。</p>
+
+            <h4 class="font-bold text-xl text-[#073B4C] mb-4">失眠認知行為療法 (CBT-I)</h4>
+            <p class="text-gray-700 mb-4">CBT-I 是慢性失眠的一線非藥物療法，結合睡眠限制、刺激控制、認知重構、放鬆訓練和睡眠衛生。系統性回顧發現，CBT-I 可縮短入睡時間約19分鐘，減少入睡後清醒時間26分鐘，增加總睡眠時間8分鐘，並提高睡眠效率10%。CBT-I 提供與安眠藥相當的持久益處，且無耐受性或依賴性風險。文化適應很重要；團體形式和整合冥想、太極拳或氣功等傳統練習可提高台灣的接受度。</p>
+
+            <h4 class="font-bold text-xl text-[#073B4C] mb-4">「5C」框架：台灣文化適應的睡眠促進行為</h4>
+            <p class="text-gray-700 mb-4">為了實用應用，以下「5C」框架總結了適應台灣文化的睡眠促進行為：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="strategy-card">
+                    <div class="strategy-icon">⏰</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">Consistent schedule (規律作息)</h4>
+                    <p class="text-sm text-gray-600 mt-2">規律的睡覺和起床時間。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🛌</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">Comfortable environment (舒適環境)</h4>
+                    <p class="text-sm text-gray-600 mt-2">安靜、黑暗、涼爽的房間，配備舒適的寢具。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🚫</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">Correct sleep hygiene (正確睡眠衛生)</h4>
+                    <p class="text-sm text-gray-600 mt-2">睡前限制刺激物、螢幕和豐盛的晚餐。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🏃</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">Continuous physical activity (持續身體活動)</h4>
+                    <p class="text-sm text-gray-600 mt-2">白天規律進行中等強度運動。</p>
+                </div>
+                <div class="strategy-card">
+                    <div class="strategy-icon">🧘</div>
+                    <h4 class="font-bold text-lg text-[#073B4C]">Calm the mind (平靜心靈)</h4>
+                    <p class="text-sm text-gray-600 mt-2">運用放鬆、冥想或精神練習。</p>
+                </div>
+            </div>
+            <p class="text-gray-700 mb-6">結合傳統放鬆儀式，如傍晚的草本茶儀式或溫泉浴，可提高依從性。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">文化與社會考量</h3>
+            <p class="text-gray-700 mb-4">台灣快速的城市化和科技驅動的生活方式對睡眠健康構成獨特挑戰。夜間工作和學習時間表、24小時便利店和夜市助長不規律的睡眠模式。高智慧型手機普及率導致長時間螢幕暴露、夜間藍光和認知刺激，延遲入睡。茶飲、檳榔嚼食和社交飲酒在社會生活中根深蒂固，但若在傍晚消費可能干擾睡眠。將這些概念融入睡眠健康教育中，如平衡陰陽能量或練習太極拳，可提高參與度。解決噪音、光污染和擁擠居住條件等環境因素需要公共衛生政策、城市規劃和雇主對健康工作與生活平衡的支持。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">睡眠障礙與特殊人群</h3>
+            <p class="text-gray-700 mb-4">失眠是台灣最常見的睡眠障礙，影響約四分之一的成年人。阻塞性睡眠呼吸中止症（OSA）也日益受到關注。某些人群需要量身定制的方法：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">兒童和青少年</h4>
+                    <p class="text-sm text-gray-600">需要8-10小時睡眠，但常因學業壓力與螢幕使用而睡眠不足。</p>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">老年人</h4>
+                    <p class="text-sm text-gray-600">睡眠效率降低，共病症影響睡眠，需強調日間光照、身體活動和疼痛管理。</p>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">孕婦</h4>
+                    <p class="text-sm text-gray-600">可受益於體位療法、放鬆和適度運動。</p>
+                </div>
+                <div class="data-card p-4">
+                    <h4 class="font-bold text-lg text-[#073B4C] mb-2">輪班工作者與夜市攤販</h4>
+                    <p class="text-sm text-gray-600">需要策略性排班、光照管理和午睡策略，以減少生理時鐘失調。</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">睡眠評估與藥物考量</h3>
+            <p class="text-gray-700 mb-4">有效的睡眠管理始於全面評估。詳細的睡眠史應探討典型的睡眠和清醒時間、睡眠品質、日間功能、生活型態因素、病史和用藥情況。驗證過的問卷如匹茲堡睡眠品質指數（PSQI）和失眠嚴重度指數可量化睡眠品質和症狀嚴重性。睡眠日記和電子應用程式提供模式洞察。多導睡眠圖仍是診斷阻塞性睡眠呼吸中止症（OSA）和其他複雜疾病的黃金標準。</p>
+            <p class="text-gray-700 mb-6">失眠的藥物治療應保留用於短期使用或行為介入不足時。安眠藥有依賴性、耐受性、跌倒和認知障礙的風險。褪黑激素和褪黑激素受體激動劑對生理時鐘紊亂有用。臨床醫生應詢問中草藥和與常規藥物的可能相互作用。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">科技、環境與政策</h3>
+            <p class="text-gray-700 mb-4">科技既能支持也能損害睡眠。穿戴式設備和智慧型手機應用程式可追蹤睡眠模式並提供CBT-I計畫。藍光螢幕會延遲褪黑激素分泌。智慧家庭技術可優化睡眠環境。環境因素如噪音、光污染和城市設計影響睡眠品質；噪音法規、暗空照明和改善綠地等政策倡議可促進更健康的睡眠環境。限制過度加班和調整學校開學時間的勞動和教育政策也支持睡眠健康。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">未來方向</h3>
+            <p class="text-gray-700 mb-4">精準睡眠醫學和時間療法等新興領域旨在根據個體的基因、生理時鐘偏好和生活型態來量身定制介入措施。數位療法透過行動平台提供基於實證的介入措施，可能增加覆蓋範圍並降低成本。人工智慧可以分析複雜的睡眠數據並提供個人化建議。將睡眠健康與其他生活型態醫學支柱（營養、身體活動、壓力管理和社交連結）整合可能會產生協同效益。在台灣，文化適應的數位工具、擴大醫療提供者的睡眠醫學培訓以及強調睡眠作為健康基礎的公共衛生運動將至關重要。</p>
+
+            <h3 class="text-2xl font-bold text-[#118AB2] mb-6">結論與核心訊息</h3>
+            <p class="text-gray-700 mb-4">修復性睡眠對於身體健康、心理福祉、認知功能和生活品質至關重要。台灣人群失眠和睡眠品質不佳的比例很高，導致顯著的心臟代謝、免疫和心理後果。生活型態醫學提供有效的非藥物策略—包括睡眠衛生、身體活動、CBT-I和文化適應的「5C」實踐—可以減輕這些風險。解決工作時間、學業要求、技術使用和環境條件等社會因素同樣重要。通過在生活型態醫學計畫中優先考慮睡眠健康，台灣可以減輕慢性病負擔並提升人口福祉。</p>
+            <div class="space-y-4 text-gray-700 mb-6">
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💡</span>
+                    <p>睡眠至關重要：成人應爭取每晚七小時或更多優質睡眠；睡眠少於七小時會增加肥胖、糖尿病、心血管疾病、憂鬱症和死亡的風險。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">🚨</span>
+                    <p>台灣睡眠問題普遍：近一半的成年人報告睡眠品質不佳，約四分之一有失眠困擾；許多人依賴鎮靜劑藥物。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">💔</span>
+                    <p>睡眠不足損害心臟代謝健康：睡眠≤5-6小時會使心血管疾病風險升高（相對風險約1.09），並增加第二型糖尿病風險（風險比約1.16-1.41）。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">😔</span>
+                    <p>失眠使憂鬱症風險翻倍：慢性失眠與罹患新發憂鬱症的風險增加兩倍以上相關。</p>
+                </div>
+                <div class="take-home-message-item">
+                    <span class="take-home-icon">✅</span>
+                    <p>生活型態介入有效：運動改善睡眠品質，CBT-I減少入睡時間並提高睡眠效率；「5C」框架中的睡眠衛生實踐可根據台灣文化進行調整。</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right text-gray-500 text-sm">作者：陳 Yen-Chin, 鄭 Shu-Fan, 廖 Chia-Te</div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>資料來源：「台灣生活型態醫學共識報告」</p>
+            <p class="text-sm text-gray-400 mt-2">此互動式應用程式僅供學術與說明之用。</p>
+        </div>
+    </footer>
+
+    <script>
+        let charts = {};
+
+        const palette = {
+            red: '#FF6B6B',
+            yellow: '#FFD166',
+            green: '#06D6A0',
+            blue: '#118AB2',
+            darkBlue: '#073B4C',
+            background: '#f0f4f8',
+            text: '#334155'
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: palette.text,
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { color: '#e2e8f0' }
+                },
+                x: {
+                    ticks: { color: palette.text, font: { size: 12 } },
+                    grid: { display: false }
+                }
+            }
+        };
+
+        function wrapLabels(label, maxLength) {
+            if (label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function createCharts() {
+            // No specific charts from numerical data found in the provided text for Chapter 6 that require Chart.js.
+            // KPIs are handled by direct HTML elements.
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            createCharts();
+        });
+    </script>
+</body>
+</html>
